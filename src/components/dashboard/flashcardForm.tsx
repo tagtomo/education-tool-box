@@ -1,7 +1,5 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 // material
-import { alpha, useTheme, experimentalStyled as styled } from '@material-ui/core/styles';
-import { Box, Grid, Button, Container, Typography } from '@material-ui/core';
 import { useForm, SubmitHandler, FormProvider, useFormContext, useFieldArray } from "react-hook-form";
 import { TextField } from "@material-ui/core";
 import { IconButton } from "@material-ui/core";
@@ -10,8 +8,8 @@ import DeleteIcon from "@material-ui/icons/Delete";
 
 // ----------------------------------------------------------------------
 type FlashCard = {
-  leftSide: String;
-  rightSide: String;
+  leftSide: string;
+  rightSide: string;
 }
 type FormValues = {
   flashcards: FlashCard[];
@@ -22,7 +20,9 @@ export default function FlashcardForm(): JSX.Element {
   });
   const { handleSubmit } = methods;
 
-  const onSubmit: SubmitHandler<FormValues> = (data) => console.log(data);
+  const onSubmit: SubmitHandler<FormValues> = (data) => {
+    console.info(data)
+  };
 
   return (
     <FormProvider {...methods}>
@@ -34,9 +34,9 @@ export default function FlashcardForm(): JSX.Element {
   );
 }
 
-type FlashcardFormDetailProps = {};
+// type FlashcardFormDetailProps = {};
 
-const FlashcardFormDetail: React.FC<FlashcardFormDetailProps> = (props) => {
+const FlashcardFormDetail: React.FC = () => {
   const {
     control,
     register,

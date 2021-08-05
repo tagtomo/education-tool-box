@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 // material
-import { alpha, useTheme, experimentalStyled as styled } from '@material-ui/core/styles';
+import { alpha, experimentalStyled as styled } from '@material-ui/core/styles';
 import { Box, Grid, Button, Container, Typography } from '@material-ui/core';
 
 import { useFullScreen } from '../../hooks/useFullscreen';
@@ -39,7 +39,7 @@ const useCounter = () => {
   const start = React.useCallback(() => {
     if (intervalRef.current !== null) {
       return;
-    };
+    }
     setCount(1);
     intervalRef.current = setInterval(() => {
       setCount(c => c + 1);
@@ -49,7 +49,7 @@ const useCounter = () => {
   const stop = React.useCallback(() => {
     if (intervalRef.current === null) {
       return;
-    };
+    }
     clearInterval(intervalRef.current);
     intervalRef.current = null;
   }, []);
@@ -76,13 +76,13 @@ const useCounter = () => {
 };
 
 export default function FlashcardComponent(): JSX.Element {
-  const theme = useTheme();
-  const { count, start, stop, restart, reset } = useCounter();
+  // const theme = useTheme();
+  const { count, start, stop } = useCounter();
 
   const [leftSide, setLeftSide] = React.useState("");
   const [rightSide, setRightSide] = React.useState("");
   const fullScreenElement = React.useRef(null);
-  const { fullScreen, open, close, toggle } = useFullScreen(fullScreenElement);
+  const { open } = useFullScreen(fullScreenElement);
   const [flashcard, setFlashcard] = React.useState<Flashcard>(initialStateFlashcard);
 
   const onStart = () => {
@@ -94,7 +94,7 @@ export default function FlashcardComponent(): JSX.Element {
   };
 
   const onFileInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    console.log(e.target.files);
+    // console.log(e.target.files);
     const fileReader = new FileReader();
     if (e.target.files.length > 0) {
       fileReader.readAsText(e.target.files[0], "UTF-8");
@@ -102,7 +102,6 @@ export default function FlashcardComponent(): JSX.Element {
         if (e.target.result) {
           try {
             const obj = JSON.parse(e.target.result as string);
-            console.log(obj);
             setFlashcard(obj);
           } catch (error) {
             console.error(error);
@@ -110,18 +109,17 @@ export default function FlashcardComponent(): JSX.Element {
           }
         } else {
           setFlashcard(initialStateFlashcard);
-        };
+        }
       };
     } else {
       setFlashcard(initialStateFlashcard);
-    };
+    }
     e.target.value = '';
   };
 
   useEffect(() => {
     const func = async () => {
-      console.debug("count useEffect flashcard:", flashcard);
-
+      // console.debug("count useEffect flashcard:", flashcard);
       if (count <= flashcard.items.length && count > 0) {
         setLeftSide(flashcard.items[count - 1].leftSide);
         setRightSide("");
@@ -129,14 +127,12 @@ export default function FlashcardComponent(): JSX.Element {
         setRightSide(flashcard.items[count - 1].rightSide);
       } else {
         stop()
-      };
+      }
     };
     if (count === null) {
       return;
-    };
-
+    }
     func();
-
   }, [count]);
 
   return (
