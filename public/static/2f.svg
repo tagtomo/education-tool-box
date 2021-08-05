@@ -1,0 +1,43 @@
+
+<svg width="1150px" height="311px" viewBox="0 0 1150 311" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <g id="2F" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="A3" transform="translate(-100.000000, -199.000000)">
+            <g id="2F" transform="translate(100.000000, 199.855305)">
+                <g id="Background-color" transform="translate(0.000000, 0.144695)" fill="#F5F5FF">
+                    <rect id="Rectangle" x="0" y="0" width="55" height="270"></rect>
+                    <rect id="Rectangle-Copy-2" x="1130" y="60" width="20" height="250"></rect>
+                    <rect id="Rectangle-Copy" x="55" y="0" width="1075" height="310"></rect>
+                </g>
+                <g id="Other" transform="translate(0.000000, 50.144695)" fill="#5A5A5D" opacity="0.5">
+                    <polygon id="Rectangle" points="55 100 419.644432 100 587.648823 100 1085 100 1085 260 55 260"></polygon>
+                    <polygon id="Rectangle-Copy-3" points="670 10 816.919844 10 884.610934 10 1085 10 1085 100 670 100"></polygon>
+                    <polygon id="Rectangle-Copy-5" points="55 0 170.057709 0 223.068803 0 380 0 380 100 55 100"></polygon>
+                    <rect id="Rectangle" x="1085" y="189" width="65" height="71"></rect>
+                    <rect id="Rectangle" x="0" y="10.1286174" width="55" height="210"></rect>
+                </g>
+                <g id="Y">
+                    <rect id="Rectangle" fill-opacity="0.5" fill="#D7FFB5" x="669" y="0.144694534" width="461" height="59.807074"></rect>
+                    <rect id="Rectangle" fill-opacity="0.5" fill="#D7FFB5" x="55" y="0.144694534" width="325" height="50"></rect>
+                    <rect id="Rectangle" fill-opacity="0.5" fill="#D7FFB5" x="380" y="0.144694534" width="290" height="150"></rect>
+                    <rect id="Rectangle" fill-opacity="0.5" fill="#D7FFB5" x="0" y="0" width="55" height="60"></rect>
+                    <rect id="Rectangle" fill="#5A5A5D" opacity="0.5" x="1085" y="60.1446945" width="45" height="2"></rect>
+                    <text font-family="Osaka" font-size="21" font-weight="normal" fill="#030303">
+                        <tspan x="513" y="83.9003215">Y</tspan>
+                    </text>
+                </g>
+                <g id="Stairs" transform="translate(1085.000000, 160.627010)">
+                    <rect id="Rectangle" fill="#FFFFFF" x="0" y="0" width="19" height="58"></rect>
+                    <line x1="0.666666667" y1="4.98392283" x2="19.3333333" y2="4.98392283" id="Line-4-Copy-5" stroke="#030C9D" stroke-linecap="square"></line>
+                    <line x1="0.666666667" y1="16.9646302" x2="19.3333333" y2="16.9646302" id="Line-4" stroke="#030C9D" stroke-linecap="square"></line>
+                    <line x1="0.666666667" y1="10.9421222" x2="19.3333333" y2="10.9421222" id="Line-4" stroke="#030C9D" stroke-linecap="square"></line>
+                    <line x1="0.666666667" y1="22.926045" x2="19.3333333" y2="22.926045" id="Line-4" stroke="#030C9D" stroke-linecap="square"></line>
+                    <line x1="0.666666667" y1="28.9067524" x2="19.3333333" y2="28.9067524" id="Line-4-Copy-4" stroke="#030C9D" stroke-linecap="square"></line>
+                    <line x1="0.666666667" y1="34.8906752" x2="19.3333333" y2="34.8906752" id="Line-4-Copy-3" stroke="#030C9D" stroke-linecap="square"></line>
+                    <line x1="0.666666667" y1="40.8745981" x2="19.3333333" y2="40.8745981" id="Line-4-Copy-2" stroke="#030C9D" stroke-linecap="square"></line>
+                    <line x1="0.666666667" y1="46.85209" x2="19.3333333" y2="46.85209" id="Line-4-Copy" stroke="#030C9D" stroke-linecap="square"></line>
+                    <line x1="0.5" y1="53.0176849" x2="19.5" y2="53.0176849" id="Line-4-Copy" stroke="#030C9D" stroke-linecap="square"></line>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

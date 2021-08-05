@@ -1,0 +1,15 @@
+version: '3.8'
+
+services:
+  dev:
+    container_name: dev
+    build: ./
+    ports:
+      - '8000:8000'
+      - '20002:20002'
+    privileged: true
+    volumes:
+      - .:/workspace:cached
+    tty: true
+    stdin_open: true
+    command: /bin/bash
