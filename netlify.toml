@@ -1,0 +1,8 @@
+[build]
+  command = "yarn deploy"
+  publish = "out"
+
+[[plugins]]
+  package = "@netlify/plugin-nextjs"
+[[plugins]]
+  package = "netlify-plugin-cache-nextjs"
