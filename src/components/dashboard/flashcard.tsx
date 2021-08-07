@@ -1,11 +1,16 @@
-import React, { useEffect } from 'react';
+import React, { useState } from 'react';
 // material
 import { alpha, experimentalStyled as styled } from '@material-ui/core/styles';
-import { Box, Grid, Button, Container, Typography } from '@material-ui/core';
+import { Button, Container } from '@material-ui/core';
+import { FlashCardCanvas, FlashCard } from "./FlashCardCanvas";
 
 import { useFullScreen } from '../../hooks/useFullscreen';
-
 // ----------------------------------------------------------------------
+declare global {
+  interface HTMLCanvasElement {
+    captureStream(frameRate?: number): MediaStream;
+  }
+}
 
 const RootStyle = styled('div')(({ theme }) => ({
   // padding: theme.spacing(24, 0),
@@ -17,76 +22,71 @@ const RootStyle = styled('div')(({ theme }) => ({
 }));
 
 // models
-type item = {
-  leftSide: string;
-  rightSide: string;
-};
-type Flashcard = {
-  title: string;
-  items: item[];
-};
-const initialStateFlashcard = {
+const initialStateFlashcard: FlashCard = {
   title: "",
+  endText: "",
   items: []
 };
 
-const _sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
-
-const useCounter = () => {
-  const [count, setCount] = React.useState(null);
-  const intervalRef = React.useRef(null);
-
-  const start = React.useCallback(() => {
-    if (intervalRef.current !== null) {
-      return;
-    }
-    setCount(1);
-    intervalRef.current = setInterval(() => {
-      setCount(c => c + 1);
-    }, 4000);
-  }, []);
-
-  const stop = React.useCallback(() => {
-    if (intervalRef.current === null) {
-      return;
-    }
-    clearInterval(intervalRef.current);
-    intervalRef.current = null;
-  }, []);
-
-  const restart = React.useCallback(() => {
-    clearInterval(intervalRef.current);
-    intervalRef.current = null;
-    start();
-  }, []);
-
-  const reset = React.useCallback(() => {
-    clearInterval(intervalRef.current);
-    intervalRef.current = null;
-    setCount(0);
-  }, []);
-
-  return {
-    count,
-    start,
-    stop,
-    restart,
-    reset
-  }
-};
+function shuffleArray(inputArray: any) {
+  inputArray.sort(() => Math.random() - 0.5);
+}
+// function gcd(x, y) {
+//   if (y === 0) return x
+//   return gcd(y, x % y)
+// }
 
 export default function FlashcardComponent(): JSX.Element {
-  // const theme = useTheme();
-  const { count, start, stop } = useCounter();
+  const [flashcard, setFlashcard] = React.useState<FlashCard>(initialStateFlashcard);
+  const [inData, setInData] = useState(flashcard);
 
-  const [leftSide, setLeftSide] = React.useState("");
-  const [rightSide, setRightSide] = React.useState("");
+  const width = 1920; // FullHD
+  const height = 1080; // FullHD
+  const dispalyWidth = 320; // FullHD
+  const dispalyHeight = 180; // FullHD
+
+  const flashCardCanvasRef = React.useRef<HTMLCanvasElement>(null);
+  // const ref = React.createRef<HTMLCanvasElement>();
+
+  //
+  const stream = flashCardCanvasRef.current?.captureStream();
+  console.info(stream);
+  // const stream = ref.current?.captureStream();
+  // console.log(stream);
+  let recorder: any;
+
+  if (process.browser) {
+    // const recorder = new MediaRecorder(stream, { mimeType: 'video/webm;codecs=vp9' });
+    recorder = new MediaRecorder(stream, { mimeType: 'video/webm;codecs=vp9' });
+    recorder.ondataavailable = function (e) {
+      const videoBlob = new Blob([e.data], { type: e.data.type });
+      const blobUrl = window.URL.createObjectURL(videoBlob);
+      const anchor = document.getElementById('downloadlink') as HTMLAnchorElement;
+      anchor.download = 'movie.webm';
+      anchor.href = blobUrl;
+      anchor.style.display = 'block';
+    }
+  }
+
   const fullScreenElement = React.useRef(null);
   const { open } = useFullScreen(fullScreenElement);
-  const [flashcard, setFlashcard] = React.useState<Flashcard>(initialStateFlashcard);
-
-  const onStart = () => {
-    start();
+  const [isPlay, setIsPlay] = useState(false);
+  const onPlay = () => {
+    setInData(flashcard);
+    setIsPlay(true);
+  };
+  const onShufflePlay = () => {
+    setInData(() => {
+      const inData = flashcard;
+      shuffleArray(inData.items);
+      return inData;
+    });
+    setIsPlay(true);
+    recorder.start();
+  };
+  const onStop = () => {
+    setIsPlay(false);
+    recorder.stop();
   };
 
   const onFullScreen = () => {
@@ -117,56 +117,34 @@ export default function FlashcardComponent(): JSX.Element {
     e.target.value = '';
   };
 
-  useEffect(() => {
-    const func = async () => {
-      // console.debug("count useEffect flashcard:", flashcard);
-      if (count <= flashcard.items.length && count > 0) {
-        setLeftSide(flashcard.items[count - 1].leftSide);
-        setRightSide("");
-        await _sleep(2000);
-        setRightSide(flashcard.items[count - 1].rightSide);
-      } else {
-        stop()
-      }
-    };
-    if (count === null) {
-      return;
-    }
-    func();
-  }, [count]);
-
   return (
     <RootStyle>
       <Container maxWidth="lg" ref={fullScreenElement}>
-        <Grid container spacing={0}>
-          <Grid item xs={6} sm={6} dir="ltr">
-            <Box display="flex" justifyContent="center" bgcolor="background.paper" height="80vh">
-              <Typography
-                gutterBottom
-                component="div"
-                sx={{ margin: "auto", fontSize: 100, fontWeight: 900 }}>
-                {leftSide}
-              </Typography>
-            </Box>
-          </Grid>
-          <Grid item xs={6} sm={6} dir="ltr">
-            <Box display="flex" justifyContent="center" bgcolor="background.paper" height="80vh">
-              <Typography
-                gutterBottom
-                component="div"
-                color="secondary"
-                sx={{ margin: "auto", fontSize: 100, fontWeight: 900 }}>
-                {rightSide}
-              </Typography>
-            </Box>
-          </Grid>
-        </Grid>
-        <Button onClick={onStart}>開始</Button>
+        <div>
+          <FlashCardCanvas
+            width={width}
+            height={height}
+            isPlay={isPlay}
+            data={inData}
+            flashTime={2000}
+            style={{ height: dispalyHeight, width: dispalyWidth }}
+            elmRef={flashCardCanvasRef}
+          />
+        </div>
+        {isPlay ? (
+          <button onClick={onStop}>STOP</button>
+        ) : (
+          <React.Fragment>
+            <button onClick={onPlay}>PLAY</button>
+            <button onClick={onShufflePlay}>Shuffle Play</button>
+          </React.Fragment>
+        )}
         <Button onClick={onFullScreen}>フルスクリーン</Button>
         <input type='file' onChange={onFileInputChange} />
-        <div>count:{count}</div>
+        <a id="downloadlink" >download</a>
         <div>
-          タイトル：{flashcard.title}
+          <p>タイトル：{flashcard.title}</p>
+          <p>終了テキスト：{flashcard.endText}</p>
           <table>
             <thead>
               <tr>
@@ -187,11 +165,10 @@ export default function FlashcardComponent(): JSX.Element {
               })}
             </tbody>
           </table>
-
         </div>
-
-        {/* <FlashcardForm /> */}
       </Container>
+      {/* <canvas ref={ref} />; */}
+
     </RootStyle >
   );
 }
