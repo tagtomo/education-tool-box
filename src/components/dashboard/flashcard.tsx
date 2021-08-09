@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 // material
 import { alpha, experimentalStyled as styled } from '@material-ui/core/styles';
 import { Button, Container } from '@material-ui/core';
 import { FlashCardCanvas, FlashCard } from "./FlashCardCanvas";
 
 import { useFullScreen } from '../../hooks/useFullscreen';
+import { useCanvasRecorder } from "./useCanvasRecorder";
 // ----------------------------------------------------------------------
 declare global {
   interface HTMLCanvasElement {
@@ -46,19 +47,18 @@ export default function FlashcardComponent(): JSX.Element {
   const dispalyHeight = 180; // FullHD
 
   const flashCardCanvasRef = React.useRef<HTMLCanvasElement>(null);
+  const { testDownload } = useCanvasRecorder(flashCardCanvasRef);
   // const ref = React.createRef<HTMLCanvasElement>();
 
-  //
-  const stream = flashCardCanvasRef.current?.captureStream();
-  console.info(stream);
-  // const stream = ref.current?.captureStream();
-  // console.log(stream);
   let recorder: any;
-
-  if (process.browser) {
-    // const recorder = new MediaRecorder(stream, { mimeType: 'video/webm;codecs=vp9' });
+  useEffect(() => {
+    // if (process.browser) {
+    const stream = flashCardCanvasRef.current?.captureStream();
+    console.info("useEffect stream:", stream);
     recorder = new MediaRecorder(stream, { mimeType: 'video/webm;codecs=vp9' });
+    console.info("useEffect befor recorder:", recorder);
     recorder.ondataavailable = function (e) {
+      console.info("recorder ondataavailable e:", e);
       const videoBlob = new Blob([e.data], { type: e.data.type });
       const blobUrl = window.URL.createObjectURL(videoBlob);
       const anchor = document.getElementById('downloadlink') as HTMLAnchorElement;
@@ -66,8 +66,9 @@ export default function FlashcardComponent(): JSX.Element {
       anchor.href = blobUrl;
       anchor.style.display = 'block';
     }
-  }
-
+    console.info("useEffect after recorder:recorder", recorder);
+    // }
+  }, []);
   const fullScreenElement = React.useRef(null);
   const { open } = useFullScreen(fullScreenElement);
   const [isPlay, setIsPlay] = useState(false);
@@ -82,15 +83,20 @@ export default function FlashcardComponent(): JSX.Element {
       return inData;
     });
     setIsPlay(true);
-    recorder.start();
+    // console.info("onShufflePlay recorder:", recorder);
+    // recorder.start();
   };
   const onStop = () => {
     setIsPlay(false);
-    recorder.stop();
+    // recorder.stop();
   };
 
   const onFullScreen = () => {
     open();
+  };
+
+  const onTest = () => {
+    testDownload();
   };
 
   const onFileInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -141,6 +147,7 @@ export default function FlashcardComponent(): JSX.Element {
         )}
         <Button onClick={onFullScreen}>フルスクリーン</Button>
         <input type='file' onChange={onFileInputChange} />
+        <Button onClick={onTest}>download</Button>
         <a id="downloadlink" >download</a>
         <div>
           <p>タイトル：{flashcard.title}</p>
