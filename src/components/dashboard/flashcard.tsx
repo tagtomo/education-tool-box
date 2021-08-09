@@ -49,8 +49,7 @@ export default function FlashcardComponent(): JSX.Element {
   const flashCardCanvasRef = React.useRef<HTMLCanvasElement>(null);
   const { recording, initRecorder, startRecording, endRecording } = useCanvasRecorder(flashCardCanvasRef);
 
-  const fullScreenElement = React.useRef(null);
-  const { open } = useFullScreen(fullScreenElement);
+  const { open } = useFullScreen(flashCardCanvasRef);
   const [isPlay, setIsPlay] = useState(false);
   const onPlay = () => {
     setInData(flashcard);
@@ -66,10 +65,6 @@ export default function FlashcardComponent(): JSX.Element {
   };
   const onStop = () => {
     setIsPlay(false);
-  };
-
-  const onFullScreen = () => {
-    open();
   };
 
   const onStartRecoding = () => {
@@ -106,18 +101,16 @@ export default function FlashcardComponent(): JSX.Element {
 
   return (
     <RootStyle>
-      <Container maxWidth="lg" ref={fullScreenElement}>
-        <div>
-          <FlashCardCanvas
-            width={width}
-            height={height}
-            isPlay={isPlay}
-            data={inData}
-            flashTime={2000}
-            style={{ height: dispalyHeight, width: dispalyWidth }}
-            elmRef={flashCardCanvasRef}
-          />
-        </div>
+      <Container maxWidth="lg">
+        <FlashCardCanvas
+          width={width}
+          height={height}
+          isPlay={isPlay}
+          data={inData}
+          flashTime={2000}
+          style={{ height: dispalyHeight, width: dispalyWidth }}
+          elmRef={flashCardCanvasRef}
+        />
         {isPlay ? (
           <button onClick={onStop}>STOP</button>
         ) : (
@@ -126,7 +119,7 @@ export default function FlashcardComponent(): JSX.Element {
             <button onClick={onShufflePlay}>Shuffle Play</button>
           </React.Fragment>
         )}
-        <Button onClick={onFullScreen}>フルスクリーン</Button>
+        <Button onClick={open}>フルスクリーン</Button>
         <input type='file' onChange={onFileInputChange} />
         {recording ? (
           <Button onClick={onEndRecoding}>REC END</Button>

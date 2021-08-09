@@ -48,7 +48,7 @@ export const FlashCardCanvas: FC<FlashCardCanvasProps> = ({
     } else if (width < 1000) {
       fontSize = 100;
     } else {
-      fontSize = 150;
+      fontSize = 300;
     }
     return fontSize;
   };
