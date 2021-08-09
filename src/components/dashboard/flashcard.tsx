@@ -29,8 +29,13 @@ const initialStateFlashcard: FlashCard = {
   items: []
 };
 
-function shuffleArray(inputArray: any) {
-  inputArray.sort(() => Math.random() - 0.5);
+// 配列シャッフルロジック
+const shuffle = ([...array]) => {
+  for (let i = array.length - 1; i >= 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+  return array;
 }
 
 export default function FlashcardComponent(): JSX.Element {
@@ -52,17 +57,20 @@ export default function FlashcardComponent(): JSX.Element {
   const { open } = useFullScreen(flashCardCanvasRef);
   const [isPlay, setIsPlay] = useState(false);
   const onPlay = () => {
-    setInData(flashcard);
-    setIsPlay(true);
-  };
-  const onShufflePlay = () => {
-    setInData(() => {
-      const inData = flashcard;
-      shuffleArray(inData.items);
-      return inData;
+    setInData({
+      ...flashcard,
+      items: flashcard.items
     });
     setIsPlay(true);
   };
+  const onShufflePlay = () => {
+    setInData({
+      ...flashcard,
+      items: shuffle(flashcard.items)
+    });
+    setIsPlay(true);
+  };
+
   const onStop = () => {
     setIsPlay(false);
   };
