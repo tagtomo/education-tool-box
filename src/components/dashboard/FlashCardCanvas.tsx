@@ -72,6 +72,16 @@ export const FlashCardCanvas: FC<FlashCardCanvasProps> = ({
     ctx.restore(); // 処理前設定の戻し
   };
 
+  const backgroundColor = (ctx: CanvasRenderingContext2D,
+    color: string
+  ) => {
+    // ctx.save(); // 処理前設定保存
+    ctx.beginPath();
+    ctx.fillStyle = color;
+    ctx.fillRect(0, 0, elmRef.current.width, elmRef.current.height);
+    // ctx.restore(); // 処理前設定の戻し
+  };
+
   useAnimationFrame(() => {
     const ctx = elmRef.current?.getContext("2d");
     if (!ctx) {
@@ -81,6 +91,7 @@ export const FlashCardCanvas: FC<FlashCardCanvasProps> = ({
     const fontSize = calcFontSize(width);
     ctx.font = `bold ${fontSize}px Arial, meiryo, sans-serif`;
     ctx.clearRect(0, 0, width, height);
+    backgroundColor(ctx, "oldlace");
     centerText(ctx, data.title, fontSize, width, height);
     if (!isPlay) {
       return;
@@ -89,15 +100,18 @@ export const FlashCardCanvas: FC<FlashCardCanvasProps> = ({
     const elapsedTime = getTime() - startTime;
     if (data.items.length < count) {
       ctx.clearRect(0, 0, width, height);
+      backgroundColor(ctx, "oldlace");
       centerText(ctx, data.endText, fontSize, width, height);
       return;
     }
 
     if (count <= 0) {
       ctx.clearRect(0, 0, width, height);
+      backgroundColor(ctx, "oldlace");
       centerText(ctx, data.title, fontSize, width, height);
     } else {
       ctx.clearRect(0, 0, width, height);
+      backgroundColor(ctx, "oldlace");
       centerText(ctx, data.items[count - 1].leftSide, fontSize, width / 2, height);
       if (elapsedTime > flashTime) {
         centerText(

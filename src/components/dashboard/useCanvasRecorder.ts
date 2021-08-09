@@ -7,7 +7,7 @@ type useCanvasRecorderReturnType = {
   testDownload: () => void;
 }
 export const useCanvasRecorder = (targetRef: React.MutableRefObject<HTMLCanvasElement>): useCanvasRecorderReturnType => {
-  let recorderRef = useRef<MediaRecorder>();
+  const recorderRef = useRef<MediaRecorder>();
   const [recording, setRecording] = useState(false);
 
   const getStream = async () => {
@@ -16,46 +16,33 @@ export const useCanvasRecorder = (targetRef: React.MutableRefObject<HTMLCanvasEl
   };
 
   const initRecorder = async () => {
-    let stream = await getStream();
+    const stream = await getStream();
     if (!stream) return;
     try {
-      let recorder = new MediaRecorder(stream, {
+      const recorder = new MediaRecorder(stream, {
         mimeType: "video/webm;codecs=vp9"
       });
       recorder.ondataavailable = function (e) {
-        console.log("ondataavailable event:", e);
+        console.info("ondataavailable event:", e);
         const videoBlob = new Blob([e.data], { type: e.data.type });
-        console.log("ondataavailable videoBlob:", videoBlob);
-        // const blobUrl = window.URL.createObjectURL(videoBlob);
-        // const anchor = document.getElementById(
-        //   "downloadlink"
-        // ) as HTMLAnchorElement;
-        // anchor.download = "movie.webm";
-        // anchor.href = blobUrl;
-        // anchor.style.display = "block";
-
-        var url = URL.createObjectURL(videoBlob);
-        var a = document.createElement("a");
+        const url = URL.createObjectURL(videoBlob);
+        const a = document.createElement("a");
         document.body.appendChild(a);
-        // a.style = 'display: none';
         a.href = url;
-        a.download = "test.webm";
+        a.download = "canvas.webm";
         a.click();
         window.URL.revokeObjectURL(url);
       };
       recorderRef.current = recorder;
-      // console.log("recorderRef.current:", recorderRef);
-      // setRecorder(recorder);
     } catch (err) {
-      console.log(err.name);
       return err.name; /* return the error name */
     }
   };
 
   const startRecording = async () => {
+    await initRecorder();
     if (recorderRef.current) {
       recorderRef.current.start();
-      console.log("startRecording recorderRef.current:", recorderRef.current);
     }
     setRecording(true);
   };
@@ -63,7 +50,6 @@ export const useCanvasRecorder = (targetRef: React.MutableRefObject<HTMLCanvasEl
   const endRecording = async () => {
     if (recorderRef.current) {
       recorderRef.current.stop();
-      console.log("endRecording recorderRef.current:", recorderRef.current);
     }
     setRecording(false);
   };
@@ -71,7 +57,7 @@ export const useCanvasRecorder = (targetRef: React.MutableRefObject<HTMLCanvasEl
   const testDownload = async () => {
     const blob = new Blob(["Hello, blob!"], { type: 'text/plain' });
     const url = URL.createObjectURL(blob);
-    let link = document.createElement("a");
+    const link = document.createElement("a");
     document.body.appendChild(link);
     link.download = 'foo.txt';
     link.href = url;

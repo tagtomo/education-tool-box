@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 // material
 import { alpha, experimentalStyled as styled } from '@material-ui/core/styles';
 import { Button, Container } from '@material-ui/core';
@@ -32,10 +32,6 @@ const initialStateFlashcard: FlashCard = {
 function shuffleArray(inputArray: any) {
   inputArray.sort(() => Math.random() - 0.5);
 }
-// function gcd(x, y) {
-//   if (y === 0) return x
-//   return gcd(y, x % y)
-// }
 
 export default function FlashcardComponent(): JSX.Element {
   const [flashcard, setFlashcard] = React.useState<FlashCard>(initialStateFlashcard);
@@ -47,28 +43,8 @@ export default function FlashcardComponent(): JSX.Element {
   const dispalyHeight = 180; // FullHD
 
   const flashCardCanvasRef = React.useRef<HTMLCanvasElement>(null);
-  const { testDownload } = useCanvasRecorder(flashCardCanvasRef);
-  // const ref = React.createRef<HTMLCanvasElement>();
+  const { initRecorder, startRecording, endRecording } = useCanvasRecorder(flashCardCanvasRef);
 
-  let recorder: any;
-  useEffect(() => {
-    // if (process.browser) {
-    const stream = flashCardCanvasRef.current?.captureStream();
-    console.info("useEffect stream:", stream);
-    recorder = new MediaRecorder(stream, { mimeType: 'video/webm;codecs=vp9' });
-    console.info("useEffect befor recorder:", recorder);
-    recorder.ondataavailable = function (e) {
-      console.info("recorder ondataavailable e:", e);
-      const videoBlob = new Blob([e.data], { type: e.data.type });
-      const blobUrl = window.URL.createObjectURL(videoBlob);
-      const anchor = document.getElementById('downloadlink') as HTMLAnchorElement;
-      anchor.download = 'movie.webm';
-      anchor.href = blobUrl;
-      anchor.style.display = 'block';
-    }
-    console.info("useEffect after recorder:recorder", recorder);
-    // }
-  }, []);
   const fullScreenElement = React.useRef(null);
   const { open } = useFullScreen(fullScreenElement);
   const [isPlay, setIsPlay] = useState(false);
@@ -83,24 +59,25 @@ export default function FlashcardComponent(): JSX.Element {
       return inData;
     });
     setIsPlay(true);
-    // console.info("onShufflePlay recorder:", recorder);
-    // recorder.start();
   };
   const onStop = () => {
     setIsPlay(false);
-    // recorder.stop();
   };
 
   const onFullScreen = () => {
     open();
   };
 
-  const onTest = () => {
-    testDownload();
+  const onStartRecoding = () => {
+    initRecorder();
+    startRecording();
+  };
+
+  const onEndRecoding = () => {
+    endRecording();
   };
 
   const onFileInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    // console.log(e.target.files);
     const fileReader = new FileReader();
     if (e.target.files.length > 0) {
       fileReader.readAsText(e.target.files[0], "UTF-8");
@@ -147,8 +124,8 @@ export default function FlashcardComponent(): JSX.Element {
         )}
         <Button onClick={onFullScreen}>フルスクリーン</Button>
         <input type='file' onChange={onFileInputChange} />
-        <Button onClick={onTest}>download</Button>
-        <a id="downloadlink" >download</a>
+        <Button onClick={onStartRecoding}>REC</Button>
+        <Button onClick={onEndRecoding}>REC END</Button>
         <div>
           <p>タイトル：{flashcard.title}</p>
           <p>終了テキスト：{flashcard.endText}</p>
@@ -174,7 +151,6 @@ export default function FlashcardComponent(): JSX.Element {
           </table>
         </div>
       </Container>
-      {/* <canvas ref={ref} />; */}
 
     </RootStyle >
   );
