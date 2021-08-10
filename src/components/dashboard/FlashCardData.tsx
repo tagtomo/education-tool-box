@@ -18,8 +18,11 @@ export default function FlashcardData({ loadData, onFileInputChange }: Flashcard
   const markdown = `
 ### ファイル作成方法
 ファイルを作成してアップロードします。
-* ファイル名は任意の名前.jsonで作成
-* ファイルの内容は作成例を元に作成
+~~~text
+  1. ファイル名は任意の名前.jsonで作成
+  2. ファイルの内容は作成例を元に作成
+~~~
+
 #### 作成例
 ~~~json
   {
@@ -66,9 +69,8 @@ export default function FlashcardData({ loadData, onFileInputChange }: Flashcard
             </>
           ) : null}
         </Box>
-        <Box>
+        <Box sx={{ backgroundColor: "white", padding: "18px" }}>
           <ReactMarkdown
-            // children={markdown}
             components={{
               code: CodeBlock,
             }}
