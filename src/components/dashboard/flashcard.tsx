@@ -5,7 +5,7 @@ import FormGroup from '@material-ui/core/FormGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 
 import { alpha, experimentalStyled as styled } from '@material-ui/core/styles';
-import { Button, Container } from '@material-ui/core';
+import { Button, Container, Box } from '@material-ui/core';
 import { FlashCardCanvas, FlashCard } from "./FlashCardCanvas";
 
 import { useFullScreen } from '../../hooks/useFullscreen';
@@ -49,6 +49,7 @@ export default function FlashcardComponent(): JSX.Element {
     { type: "FullHD", width: 1920, height: 1080 },
   ]
   const flashCardCanvasRef = React.useRef<HTMLCanvasElement>(null);
+  const displayRef = React.useRef<HTMLElement>(null);
   const { recording, initRecorder, startRecording, endRecording } = useCanvasRecorder(flashCardCanvasRef);
   const [shuffleChecked, setShuffleChecked] = React.useState(true);
   const [recChecked, setRecChecked] = React.useState(true);
@@ -123,61 +124,72 @@ export default function FlashcardComponent(): JSX.Element {
   return (
     <RootStyle>
       <Container maxWidth="lg">
-        <FlashCardCanvas
-          width={width}
-          height={height}
-          isPlay={isPlay}
-          data={inData}
-          flashTime={2000}
-          style={{ height: dispalyHeight, width: dispalyWidth }}
-          elmRef={flashCardCanvasRef}
-        />
-        <FormGroup>
-          <FormControlLabel
-            disabled={isPlay}
-            control={<Switch size="small" checked={shuffleChecked} onChange={toggleShuffleChecked} />}
-            label="シャッフル"
+        <Box ref={displayRef} sx={{
+          display: "inline-block",
+          position: "relative"
+        }}>
+          <FlashCardCanvas
+            width={width}
+            height={height}
+            isPlay={isPlay}
+            data={inData}
+            flashTime={2000}
+            style={{ height: dispalyHeight, width: dispalyWidth }}
+            elmRef={flashCardCanvasRef}
           />
-          <FormControlLabel
-            disabled={isPlay}
-            control={<Switch size="small" checked={recChecked} onChange={toggleRecChecked} />}
-            label="録画"
-          />
-        </FormGroup>
-        {isPlay ? (
-          <Button disabled={!isReady}
-            onClick={onStop}>停止</Button>
-        ) : (
-          <Button disabled={!isReady} onClick={onPlay}>再生</Button>
-        )}
-        {recording ? (<p>録画中...</p>) : null}
-        <Button onClick={open}>フルスクリーン</Button>
-        <input type='file' onChange={onFileInputChange} />
-
-        <div>
-          <p>タイトル：{flashcard.title}</p>
-          <p>終了テキスト：{flashcard.endText}</p>
-          <table>
-            <thead>
-              <tr>
-                <th>左側</th>
-                <th>右側</th>
-              </tr>
-            </thead>
-            <tbody>
-              {flashcard.items.map((item, index) => {
-                return (
-                  <React.Fragment key={index}>
-                    <tr>
-                      <td>{item.leftSide}</td>
-                      <td>{item.rightSide}</td>
-                    </tr>
-                  </React.Fragment>
-                )
-              })}
-            </tbody>
-          </table>
-        </div>
+          <Box sx={{
+            position: "relative",
+            left: "10px"
+          }}>
+            <FormGroup>
+              <FormControlLabel
+                disabled={isPlay}
+                control={<Switch size="small" checked={shuffleChecked} onChange={toggleShuffleChecked} />}
+                label="シャッフル"
+              />
+              <FormControlLabel
+                disabled={isPlay}
+                control={<Switch size="small" checked={recChecked} onChange={toggleRecChecked} />}
+                label="録画"
+              />
+            </FormGroup>
+            {isPlay ? (
+              <Button disabled={!isReady}
+                onClick={onStop}>停止</Button>
+            ) : (
+              <Button disabled={!isReady} onClick={onPlay}>再生</Button>
+            )}
+            {recording ? (<p>録画中...</p>) : null}
+            <Button onClick={open}>フルスクリーン</Button>
+          </Box>
+        </Box>
+        <Box>
+          <input type='file' onChange={onFileInputChange} />
+          <div>
+            <p>タイトル：{flashcard.title}</p>
+            <p>終了テキスト：{flashcard.endText}</p>
+            <table>
+              <thead>
+                <tr>
+                  <th>左側</th>
+                  <th>右側</th>
+                </tr>
+              </thead>
+              <tbody>
+                {flashcard.items.map((item, index) => {
+                  return (
+                    <React.Fragment key={index}>
+                      <tr>
+                        <td>{item.leftSide}</td>
+                        <td>{item.rightSide}</td>
+                      </tr>
+                    </React.Fragment>
+                  )
+                })}
+              </tbody>
+            </table>
+          </div>
+        </Box>
       </Container>
 
     </RootStyle >
