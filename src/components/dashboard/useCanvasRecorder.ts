@@ -29,7 +29,7 @@ export const useCanvasRecorder = (targetRef: React.MutableRefObject<HTMLCanvasEl
         const a = document.createElement("a");
         document.body.appendChild(a);
         a.href = url;
-        a.download = "canvas.webm";
+        a.download = "flashcard.webm";
         a.click();
         window.URL.revokeObjectURL(url);
       };

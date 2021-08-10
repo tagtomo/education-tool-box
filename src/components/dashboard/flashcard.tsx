@@ -1,5 +1,9 @@
 import React, { useState } from 'react';
 // material
+import Switch from '@material-ui/core/Switch';
+import FormGroup from '@material-ui/core/FormGroup';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+
 import { alpha, experimentalStyled as styled } from '@material-ui/core/styles';
 import { Button, Container } from '@material-ui/core';
 import { FlashCardCanvas, FlashCard } from "./FlashCardCanvas";
@@ -14,7 +18,6 @@ declare global {
 }
 
 const RootStyle = styled('div')(({ theme }) => ({
-  // padding: theme.spacing(24, 0),
   backgroundImage:
     theme.palette.mode === 'light'
       ? `linear-gradient(180deg, ${alpha(theme.palette.grey[300], 0)} 0%, ${theme.palette.grey[300]
@@ -45,43 +48,52 @@ export default function FlashcardComponent(): JSX.Element {
     { type: "4k", width: 3840, height: 2160 },
     { type: "FullHD", width: 1920, height: 1080 },
   ]
+  const flashCardCanvasRef = React.useRef<HTMLCanvasElement>(null);
+  const { recording, initRecorder, startRecording, endRecording } = useCanvasRecorder(flashCardCanvasRef);
+  const [shuffleChecked, setShuffleChecked] = React.useState(true);
+  const [recChecked, setRecChecked] = React.useState(true);
+  const { open } = useFullScreen(flashCardCanvasRef);
+  const [isPlay, setIsPlay] = useState(false);
+  const [isReady, setIsReady] = useState(false);
+
+  const toggleShuffleChecked = () => {
+    setShuffleChecked((prev) => !prev);
+  };
+
+  const toggleRecChecked = () => {
+    setRecChecked((prev) => !prev);
+  };
 
   const width = resolution[0].width;
   const height = resolution[0].height;
   const dispalyWidth = 320;
   const dispalyHeight = 180;
 
-  const flashCardCanvasRef = React.useRef<HTMLCanvasElement>(null);
-  const { recording, initRecorder, startRecording, endRecording } = useCanvasRecorder(flashCardCanvasRef);
-
-  const { open } = useFullScreen(flashCardCanvasRef);
-  const [isPlay, setIsPlay] = useState(false);
   const onPlay = () => {
-    setInData({
-      ...flashcard,
-      items: flashcard.items
-    });
-    setIsPlay(true);
-  };
-  const onShufflePlay = () => {
-    setInData({
-      ...flashcard,
-      items: shuffle(flashcard.items)
-    });
+    if (shuffleChecked) {
+      setInData({
+        ...flashcard,
+        items: shuffle(flashcard.items)
+      });
+    } else {
+      setInData({
+        ...flashcard,
+        items: flashcard.items
+      });
+    }
+    if (recChecked) {
+      initRecorder();
+      startRecording();
+    }
+
     setIsPlay(true);
   };
 
   const onStop = () => {
     setIsPlay(false);
-  };
-
-  const onStartRecoding = () => {
-    initRecorder();
-    startRecording();
-  };
-
-  const onEndRecoding = () => {
-    endRecording();
+    if (recChecked) {
+      endRecording();
+    }
   };
 
   const onFileInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -93,6 +105,7 @@ export default function FlashcardComponent(): JSX.Element {
           try {
             const obj = JSON.parse(e.target.result as string);
             setFlashcard(obj);
+            setIsReady(true);
           } catch (error) {
             console.error(error);
             setFlashcard(initialStateFlashcard);
@@ -119,21 +132,27 @@ export default function FlashcardComponent(): JSX.Element {
           style={{ height: dispalyHeight, width: dispalyWidth }}
           elmRef={flashCardCanvasRef}
         />
+        <FormGroup>
+          <FormControlLabel
+            disabled={isPlay}
+            control={<Switch size="small" checked={shuffleChecked} onChange={toggleShuffleChecked} />}
+            label="シャッフル"
+          />
+          <FormControlLabel
+            disabled={isPlay}
+            control={<Switch size="small" checked={recChecked} onChange={toggleRecChecked} />}
+            label="録画"
+          />
+        </FormGroup>
         {isPlay ? (
-          <button onClick={onStop}>STOP</button>
+          <Button disabled={!isReady}
+            onClick={onStop}>停止</Button>
         ) : (
-          <React.Fragment>
-            <button onClick={onPlay}>PLAY</button>
-            <button onClick={onShufflePlay}>Shuffle Play</button>
-          </React.Fragment>
+          <Button disabled={!isReady} onClick={onPlay}>再生</Button>
         )}
+        {recording ? (<p>録画中...</p>) : null}
         <Button onClick={open}>フルスクリーン</Button>
         <input type='file' onChange={onFileInputChange} />
-        {recording ? (
-          <Button onClick={onEndRecoding}>REC END</Button>
-        ) : (
-          <Button onClick={onStartRecoding}>REC START</Button>
-        )}
 
         <div>
           <p>タイトル：{flashcard.title}</p>

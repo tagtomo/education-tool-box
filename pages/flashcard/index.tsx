@@ -16,7 +16,7 @@ const Flashcard = (): JSX.Element => {
     >
       <main>
         <Paper variant="outlined" square >
-          <h3>フラッシュカード</h3>
+          <h3>フラッシュカード作成ツール</h3>
           <FlashcardComponent />
         </Paper>
       </main>

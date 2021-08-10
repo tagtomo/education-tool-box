@@ -37,7 +37,6 @@ export const FlashCardCanvas: FC<FlashCardCanvasProps> = ({
   useEffect(() => {
     console.info(data);
   }, [data]);
-  // const c = useRef<HTMLCanvasElement>();
   let startTime = getTime();
   let count = 0;
 
@@ -75,11 +74,9 @@ export const FlashCardCanvas: FC<FlashCardCanvasProps> = ({
   const backgroundColor = (ctx: CanvasRenderingContext2D,
     color: string
   ) => {
-    // ctx.save(); // 処理前設定保存
     ctx.beginPath();
     ctx.fillStyle = color;
     ctx.fillRect(0, 0, elmRef.current.width, elmRef.current.height);
-    // ctx.restore(); // 処理前設定の戻し
   };
 
   useAnimationFrame(() => {
