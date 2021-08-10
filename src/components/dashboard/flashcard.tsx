@@ -8,7 +8,7 @@ import { alpha, experimentalStyled as styled } from '@material-ui/core/styles';
 import { Button, Container, Box } from '@material-ui/core';
 import { FlashCardCanvas } from "./FlashCardCanvas";
 
-import { useFullScreen } from '../../hooks/useFullscreen';
+// import { useFullScreen } from '../../hooks/useFullscreen';
 import { useCanvasRecorder } from "./useCanvasRecorder";
 import { useFlashCardData } from "./useFlashCardData";
 import FlashCardData from "./FlashCardData";
@@ -46,7 +46,7 @@ export default function FlashcardComponent(): JSX.Element {
   const { recording, initRecorder, startRecording, endRecording } = useCanvasRecorder(flashCardCanvasRef);
   const [shuffleChecked, setShuffleChecked] = React.useState(true);
   const [recChecked, setRecChecked] = React.useState(true);
-  const { open } = useFullScreen(flashCardCanvasRef);
+  // const { open } = useFullScreen(flashCardCanvasRef);
   const [isPlay, setIsPlay] = useState(false);
   const { isReady, loadData, onFileInputChange } = useFlashCardData();
   const [inData, setInData] = useState(loadData);
@@ -130,7 +130,7 @@ export default function FlashcardComponent(): JSX.Element {
                 label="録画"
               />
             </FormGroup>
-            <Button onClick={open}>フルスクリーン</Button>
+            {/* <Button onClick={open}>フルスクリーン</Button> */}
           </Box>
         </Box>
         <Box>
