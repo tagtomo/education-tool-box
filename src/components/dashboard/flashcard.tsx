@@ -6,10 +6,12 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 
 import { alpha, experimentalStyled as styled } from '@material-ui/core/styles';
 import { Button, Container, Box } from '@material-ui/core';
-import { FlashCardCanvas, FlashCard } from "./FlashCardCanvas";
+import { FlashCardCanvas } from "./FlashCardCanvas";
 
 import { useFullScreen } from '../../hooks/useFullscreen';
 import { useCanvasRecorder } from "./useCanvasRecorder";
+import { useFlashCardData } from "./useFlashCardData";
+import FlashCardData from "./FlashCardData";
 // ----------------------------------------------------------------------
 declare global {
   interface HTMLCanvasElement {
@@ -25,13 +27,6 @@ const RootStyle = styled('div')(({ theme }) => ({
       : 'none'
 }));
 
-// models
-const initialStateFlashcard: FlashCard = {
-  title: "",
-  endText: "",
-  items: []
-};
-
 // 配列シャッフルロジック
 const shuffle = ([...array]) => {
   for (let i = array.length - 1; i >= 0; i--) {
@@ -42,8 +37,6 @@ const shuffle = ([...array]) => {
 }
 
 export default function FlashcardComponent(): JSX.Element {
-  const [flashcard, setFlashcard] = React.useState<FlashCard>(initialStateFlashcard);
-  const [inData, setInData] = useState(flashcard);
   const resolution = [
     { type: "4k", width: 3840, height: 2160 },
     { type: "FullHD", width: 1920, height: 1080 },
@@ -55,7 +48,8 @@ export default function FlashcardComponent(): JSX.Element {
   const [recChecked, setRecChecked] = React.useState(true);
   const { open } = useFullScreen(flashCardCanvasRef);
   const [isPlay, setIsPlay] = useState(false);
-  const [isReady, setIsReady] = useState(false);
+  const { isReady, loadData, onFileInputChange } = useFlashCardData();
+  const [inData, setInData] = useState(loadData);
 
   const toggleShuffleChecked = () => {
     setShuffleChecked((prev) => !prev);
@@ -73,13 +67,13 @@ export default function FlashcardComponent(): JSX.Element {
   const onPlay = () => {
     if (shuffleChecked) {
       setInData({
-        ...flashcard,
-        items: shuffle(flashcard.items)
+        ...loadData,
+        items: shuffle(loadData.items)
       });
     } else {
       setInData({
-        ...flashcard,
-        items: flashcard.items
+        ...loadData,
+        items: loadData.items
       });
     }
     if (recChecked) {
@@ -95,30 +89,6 @@ export default function FlashcardComponent(): JSX.Element {
     if (recChecked) {
       endRecording();
     }
-  };
-
-  const onFileInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const fileReader = new FileReader();
-    if (e.target.files.length > 0) {
-      fileReader.readAsText(e.target.files[0], "UTF-8");
-      fileReader.onload = e => {
-        if (e.target.result) {
-          try {
-            const obj = JSON.parse(e.target.result as string);
-            setFlashcard(obj);
-            setIsReady(true);
-          } catch (error) {
-            console.error(error);
-            setFlashcard(initialStateFlashcard);
-          }
-        } else {
-          setFlashcard(initialStateFlashcard);
-        }
-      };
-    } else {
-      setFlashcard(initialStateFlashcard);
-    }
-    e.target.value = '';
   };
 
   return (
@@ -164,31 +134,9 @@ export default function FlashcardComponent(): JSX.Element {
           </Box>
         </Box>
         <Box>
-          <input type='file' onChange={onFileInputChange} />
-          <div>
-            <p>タイトル：{flashcard.title}</p>
-            <p>終了テキスト：{flashcard.endText}</p>
-            <table>
-              <thead>
-                <tr>
-                  <th>左側</th>
-                  <th>右側</th>
-                </tr>
-              </thead>
-              <tbody>
-                {flashcard.items.map((item, index) => {
-                  return (
-                    <React.Fragment key={index}>
-                      <tr>
-                        <td>{item.leftSide}</td>
-                        <td>{item.rightSide}</td>
-                      </tr>
-                    </React.Fragment>
-                  )
-                })}
-              </tbody>
-            </table>
-          </div>
+          <FlashCardData
+            loadData={loadData}
+            onFileInputChange={onFileInputChange} />
         </Box>
       </Container>
 
