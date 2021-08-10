@@ -111,6 +111,13 @@ export default function FlashcardComponent(): JSX.Element {
             position: "relative",
             left: "10px"
           }}>
+            {isPlay ? (
+              <Button disabled={!isReady}
+                onClick={onStop}>停止</Button>
+            ) : (
+              <Button disabled={!isReady} onClick={onPlay}>再生</Button>
+            )}
+            {recording ? (<p>録画中...</p>) : null}
             <FormGroup>
               <FormControlLabel
                 disabled={isPlay}
@@ -123,13 +130,6 @@ export default function FlashcardComponent(): JSX.Element {
                 label="録画"
               />
             </FormGroup>
-            {isPlay ? (
-              <Button disabled={!isReady}
-                onClick={onStop}>停止</Button>
-            ) : (
-              <Button disabled={!isReady} onClick={onPlay}>再生</Button>
-            )}
-            {recording ? (<p>録画中...</p>) : null}
             <Button onClick={open}>フルスクリーン</Button>
           </Box>
         </Box>
