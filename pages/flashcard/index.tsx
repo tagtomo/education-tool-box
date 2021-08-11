@@ -6,7 +6,6 @@ import FlashcardComponent from '../../src/components/dashboard/flashcard';
 import FlashCardManual from '../../src/components/dashboard/FlashCardManual';
 
 import { GetStaticProps } from 'next';
-// import matter from "gray-matter"
 import { importAll } from '../../src/utils/importAll';
 
 const RootStyle = styled(Page)({
