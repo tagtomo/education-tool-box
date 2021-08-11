@@ -13,7 +13,7 @@ const RootStyle = styled(Page)({
   height: "100%",
 });
 
-const Flashcard = ({ steps }: props): JSX.Element => {
+const Flashcard = ({ steps }): JSX.Element => {
   return (
     <RootStyle
       title="Flashcard"

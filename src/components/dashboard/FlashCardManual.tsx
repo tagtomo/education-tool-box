@@ -1,45 +1,83 @@
 import React from 'react';
 import { Container, Box } from '@material-ui/core';
-import ReactMarkdown from 'react-markdown'
-import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter'
-import { dark } from 'react-syntax-highlighter/dist/cjs/styles/prism'
-import {
-  CodeComponent,
-} from 'react-markdown/src/ast-to-react';
+import Markdown from '../Markdown'
+
+import Stepper from "@material-ui/core/Stepper";
+import Step from "@material-ui/core/Step";
+import StepButton from "@material-ui/core/StepButton";
+import Button from "@material-ui/core/Button";
+import Typography from "@material-ui/core/Typography";
 
 type FlashcardManualProps = {
   steps: any;
 }
 
 export default function FlashcardManual({ steps }: FlashcardManualProps): JSX.Element {
-  console.log("FlashcardManual steps:", steps);
+  const [activeStep, setActiveStep] = React.useState(0);
+  const totalSteps = () => {
+    return steps.length;
+  };
+
+  const isLastStep = () => {
+    return activeStep === totalSteps() - 1;
+  };
+
+  const handleNext = () => {
+    const newActiveStep = isLastStep() ? 0 : activeStep + 1;
+    setActiveStep(newActiveStep);
+  };
+
+  const handleBack = () => {
+    setActiveStep((prevActiveStep) => prevActiveStep - 1);
+  };
+
+  const handleStep = (step: number) => () => {
+    setActiveStep(step);
+  };
+
   return (
     <>
       <Container maxWidth="lg">
-        <Box sx={{ backgroundColor: "white", padding: "18px" }}>
-          {steps.map((step: any) => {
-            return <ReactMarkdown
-              components={{
-                code: CodeBlock,
-              }}
-            >{step.document.content}</ReactMarkdown>
-          })}
+        <Box sx={{ width: "100%" }}>
+          <Typography variant="h3" sx={{ mt: 2, mb: 1 }}>
+            フラッシュカード作成ツール（利用マニュアル）
+          </Typography>
+          <Stepper nonLinear activeStep={activeStep}>
+            {steps.map((item, index) => (
+              <Step key={item.title}>
+                <StepButton color="inherit" onClick={handleStep(index)} />
+              </Step>
+            ))}
+          </Stepper>
+          <div>
+            <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
+              <Button
+                color="inherit"
+                disabled={activeStep === 0}
+                onClick={handleBack}
+                sx={{ mr: 1 }}
+              >
+                Back
+              </Button>
+              <Box sx={{ flex: "1 1 auto" }} />
+              <Button onClick={handleNext} sx={{ mr: 1 }}>
+                Next
+              </Button>
+            </Box>
+          </div>
+          <div>
+            <Typography variant="h4" sx={{ mt: 2, mb: 1 }}>
+              【 ステップ {activeStep + 1} 】{steps[activeStep].document.data.title}
+            </Typography>
+            <Typography sx={{ mt: 2, mb: 1 }}>
+              <Markdown
+                content={steps[activeStep].document.content}
+                key={steps[activeStep].document.data.id}
+              />
+            </Typography>
+          </div>
         </Box>
       </Container>
     </ >
   );
 }
-
-const CodeBlock: CodeComponent = ({ inline, className, children }) => {
-  if (inline) {
-    return <code className={className}>{children}</code>;
-  }
-  const match = /language-(\w+)/.exec(className || '');
-  const lang = match && match[1] ? match[1] : '';
-  return (
-    <SyntaxHighlighter
-      style={dark}
-      language={lang}
-    >{String(children).replace(/\n$/, '')}</SyntaxHighlighter>
-  );
-};
