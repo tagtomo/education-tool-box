@@ -1,6 +1,7 @@
 import { experimentalStyled as styled } from "@material-ui/core/styles";
 import Page from "../../src/components/Page";
 import Paper from '@material-ui/core/Paper';
+import Typography from "@material-ui/core/Typography";
 
 import FlashcardComponent from '../../src/components/dashboard/flashcard';
 import FlashCardManual from '../../src/components/dashboard/FlashCardManual';
@@ -20,7 +21,9 @@ const Flashcard = ({ steps }): JSX.Element => {
     >
       <main>
         <Paper variant="outlined" square >
-          <h3>フラッシュカード作成ツール</h3>
+          <Typography variant="h3" sx={{ mt: 2, mb: 1 }}>
+            フラッシュカード作成ツール
+          </Typography>
           <FlashcardComponent />
           <FlashCardManual steps={steps} />
         </Paper>
