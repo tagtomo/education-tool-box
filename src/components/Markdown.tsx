@@ -5,6 +5,8 @@ import { dark } from 'react-syntax-highlighter/dist/cjs/styles/prism'
 import {
   CodeComponent,
 } from 'react-markdown/src/ast-to-react';
+import gfm from 'remark-gfm';
+import 'github-markdown-css/github-markdown.css';
 
 type MarkdownProps = {
   content: string;
@@ -12,15 +14,16 @@ type MarkdownProps = {
 
 export default function Markdown({ content }: MarkdownProps): JSX.Element {
   return (
-    <>
+    <div className="markdown-body">
       <ReactMarkdown
         components={{
           code: CodeBlock,
         }}
+      // remarkPlugins={[gfm]}
       >
         {content}
       </ReactMarkdown>
-    </ >
+    </div>
   );
 }
 

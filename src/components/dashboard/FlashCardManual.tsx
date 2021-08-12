@@ -44,8 +44,9 @@ export default function FlashcardManual({ steps }: FlashcardManualProps): JSX.El
           </Typography>
           <Stepper nonLinear activeStep={activeStep}>
             {steps.map((item, index) => (
-              <Step key={item.title}>
-                <StepButton color="inherit" onClick={handleStep(index)} />
+              <Step key={item.document.data.id} >
+                <StepButton color="inherit" onClick={handleStep(index)}>
+                </StepButton>
               </Step>
             ))}
           </Stepper>
@@ -69,12 +70,10 @@ export default function FlashcardManual({ steps }: FlashcardManualProps): JSX.El
             <Typography variant="h4" sx={{ mt: 2, mb: 1 }}>
               【 ステップ {activeStep + 1} 】{steps[activeStep].document.data.title}
             </Typography>
-            <Typography sx={{ mt: 2, mb: 1 }}>
-              <Markdown
-                content={steps[activeStep].document.content}
-                key={steps[activeStep].document.data.id}
-              />
-            </Typography>
+            <Markdown
+              content={steps[activeStep].document.content}
+              key={steps[activeStep].document.data.id}
+            />
           </div>
         </Box>
       </Container>
