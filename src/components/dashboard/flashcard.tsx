@@ -12,6 +12,7 @@ import { FlashCardCanvas } from "./FlashCardCanvas";
 import { useCanvasRecorder } from "./useCanvasRecorder";
 import { useFlashCardData } from "./useFlashCardData";
 import FlashCardData from "./FlashCardData";
+import FontSlider from "./FontSlider";
 // ----------------------------------------------------------------------
 declare global {
   interface HTMLCanvasElement {
@@ -46,6 +47,7 @@ export default function FlashcardComponent(): JSX.Element {
   const { recording, initRecorder, startRecording, endRecording } = useCanvasRecorder(flashCardCanvasRef);
   const [shuffleChecked, setShuffleChecked] = React.useState(true);
   const [recChecked, setRecChecked] = React.useState(true);
+  const [fontSize, setFontSize] = React.useState(20);
   // const { open } = useFullScreen(flashCardCanvasRef);
   const [isPlay, setIsPlay] = useState(false);
   const { isReady, loadData, onFileInputChange } = useFlashCardData();
@@ -57,6 +59,10 @@ export default function FlashcardComponent(): JSX.Element {
 
   const toggleRecChecked = () => {
     setRecChecked((prev) => !prev);
+  };
+
+  const changeFontSize = (e: any) => {
+    setFontSize(e.target.value);
   };
 
   const width = resolution[0].width;
@@ -103,9 +109,10 @@ export default function FlashcardComponent(): JSX.Element {
             height={height}
             isPlay={isPlay}
             data={inData}
-            flashTime={2000}
+            flashTime={3000}
             style={{ height: dispalyHeight, width: dispalyWidth }}
             elmRef={flashCardCanvasRef}
+            fontSize={fontSize}
           />
           <Box sx={{
             position: "relative",
@@ -121,13 +128,18 @@ export default function FlashcardComponent(): JSX.Element {
             <FormGroup>
               <FormControlLabel
                 disabled={isPlay}
-                control={<Switch size="small" checked={shuffleChecked} onChange={toggleShuffleChecked} />}
                 label="シャッフル"
+                control={<Switch size="small" checked={shuffleChecked} onChange={toggleShuffleChecked} />}
               />
               <FormControlLabel
                 disabled={isPlay}
-                control={<Switch size="small" checked={recChecked} onChange={toggleRecChecked} />}
                 label="録画"
+                control={<Switch size="small" checked={recChecked} onChange={toggleRecChecked} />}
+              />
+              <FormControlLabel
+                disabled={isPlay}
+                label="フォントサイズ"
+                control={<FontSlider disabled={isPlay} onChange={changeFontSize} />}
               />
             </FormGroup>
             {/* <Button onClick={open}>フルスクリーン</Button> */}

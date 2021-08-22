@@ -1,6 +1,7 @@
 import React from 'react';
 import { Container, Box } from '@material-ui/core';
 import { FlashCard } from "./FlashCardCanvas";
+// import Editor from "../Editor";
 
 type FlashcardDataProps = {
   loadData: FlashCard;
@@ -42,6 +43,7 @@ export default function FlashcardData({ loadData, onFileInputChange }: Flashcard
             </>
           ) : null}
         </Box>
+        {/* <Editor content={JSON.stringify(loadData)} /> */}
       </Container>
     </ >
   );

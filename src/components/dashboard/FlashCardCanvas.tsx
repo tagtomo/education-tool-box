@@ -18,6 +18,7 @@ export type FlashCardCanvasProps = {
   flashTime: number;
   style: React.CSSProperties;
   elmRef: RefObject<HTMLCanvasElement>
+  fontSize: number;
 };
 
 const getTime = () => {
@@ -32,7 +33,8 @@ export const FlashCardCanvas: FC<FlashCardCanvasProps> = ({
   data,
   flashTime,
   style,
-  elmRef
+  elmRef,
+  fontSize
 }) => {
   useEffect(() => {
     console.info(data);
@@ -40,17 +42,17 @@ export const FlashCardCanvas: FC<FlashCardCanvasProps> = ({
   let startTime = getTime();
   let count = 0;
 
-  const calcFontSize = (width: number) => {
-    let fontSize: number;
-    if (width < 600) {
-      fontSize = 50;
-    } else if (width < 1000) {
-      fontSize = 100;
-    } else {
-      fontSize = 300;
-    }
-    return fontSize;
-  };
+  // const calcFontSize = (width: number) => {
+  //   let fontSize: number;
+  //   if (width < 600) {
+  //     fontSize = 50;
+  //   } else if (width < 1000) {
+  //     fontSize = 100;
+  //   } else {
+  //     fontSize = 300;
+  //   }
+  //   return fontSize;
+  // };
 
   // テキストのセンタリング表示
   const centerText = (
@@ -85,7 +87,7 @@ export const FlashCardCanvas: FC<FlashCardCanvasProps> = ({
       return;
     }
     // 初期設定
-    const fontSize = calcFontSize(width);
+    // const fontSize = calcFontSize(width);
     ctx.font = `bold ${fontSize}px Arial, meiryo, sans-serif`;
     ctx.clearRect(0, 0, width, height);
     backgroundColor(ctx, "oldlace");
