@@ -55,23 +55,59 @@ export const FlashCardCanvas: FC<FlashCardCanvasProps> = ({
   // };
 
   // テキストのセンタリング表示
-  const centerText = (
+  // const centerText = (
+  //   ctx: CanvasRenderingContext2D,
+  //   text: string,
+  //   fontSize: number,
+  //   width: number,
+  //   height: number,
+  //   paddingLeft = 0,
+  //   fillStyle = "black"
+  // ) => {
+  //   ctx.save(); // 処理前設定保存
+  //   ctx.beginPath();
+  //   ctx.font = `bold ${fontSize}px Arial, meiryo, sans-serif`;
+  //   ctx.fillStyle = fillStyle;
+  //   ctx.textAlign = "center";
+  //   ctx.fillText(text, width / 2 + paddingLeft, height / 2);
+  //   ctx.restore(); // 処理前設定の戻し
+  // };
+
+  const ctxFillText = (
     ctx: CanvasRenderingContext2D,
-    text: string,
-    fontSize: number,
+    text,
+    fontSize,
     width: number,
     height: number,
+    textX,
+    textY,
+    fillStyle = "black",
     paddingLeft = 0,
-    fillStyle = "black"
+    fontStyle = "bold",
+    fontFamily = "sans-serif"
   ) => {
     ctx.save(); // 処理前設定保存
     ctx.beginPath();
-    ctx.font = `bold ${fontSize}px Arial, meiryo, sans-serif`;
+    ctx.font = (
+      fontStyle ? fontStyle : 'normal') + ' ' +
+      fontSize + 'px ' +
+      (fontFamily ? fontFamily : 'sans-serif')
     ctx.fillStyle = fillStyle;
-    ctx.textAlign = "center";
-    ctx.fillText(text, width / 2 + paddingLeft, height / 2);
+    ctx.fillText(
+      text,
+      textX === 'center' ?
+        (((width) - ctx.measureText(text).width) / 2) + paddingLeft :
+        (textX === 'right' ?
+          (width) - ctx.measureText(text).width :
+          textX && textX !== 'left' ? textX : 0),
+      textY === 'center' ?
+        ((height + fontSize / 2) / 2) :
+        (textY === 'bottom' ?
+          height - fontSize / 4 :
+          textY && textY !== 'top' ? textY : fontSize)
+    )
     ctx.restore(); // 処理前設定の戻し
-  };
+  }
 
   const backgroundColor = (ctx: CanvasRenderingContext2D,
     color: string
@@ -91,7 +127,8 @@ export const FlashCardCanvas: FC<FlashCardCanvasProps> = ({
     ctx.font = `bold ${fontSize}px Arial, meiryo, sans-serif`;
     ctx.clearRect(0, 0, width, height);
     backgroundColor(ctx, "oldlace");
-    centerText(ctx, data.title, fontSize, width, height);
+    // centerText(ctx, data.title, fontSize, width, height);
+    ctxFillText(ctx, data.title, fontSize, width, height, 'center', 'center')
     if (!isPlay) {
       return;
     }
@@ -100,28 +137,32 @@ export const FlashCardCanvas: FC<FlashCardCanvasProps> = ({
     if (data.items.length < count) {
       ctx.clearRect(0, 0, width, height);
       backgroundColor(ctx, "oldlace");
-      centerText(ctx, data.endText, fontSize, width, height);
+      // centerText(ctx, data.endText, fontSize, width, height);
+      ctxFillText(ctx, data.endText, fontSize, width, height, 'center', 'center')
       return;
     }
 
     if (count <= 0) {
       ctx.clearRect(0, 0, width, height);
       backgroundColor(ctx, "oldlace");
-      centerText(ctx, data.title, fontSize, width, height);
+      // centerText(ctx, data.title, fontSize, width, height);
+      ctxFillText(ctx, data.title, fontSize, width, height, 'center', 'center')
     } else {
       ctx.clearRect(0, 0, width, height);
       backgroundColor(ctx, "oldlace");
-      centerText(ctx, data.items[count - 1].leftSide, fontSize, width / 2, height);
+      // centerText(ctx, data.items[count - 1].leftSide, fontSize, width / 2, height);
+      ctxFillText(ctx, data.items[count - 1].leftSide, fontSize, width / 2, height, 'center', 'center')
       if (elapsedTime > flashTime) {
-        centerText(
-          ctx,
-          data.items[count - 1].rightSide,
-          fontSize,
-          width / 2,
-          height,
-          width / 2,
-          "blue"
-        );
+        // centerText(
+        //   ctx,
+        //   data.items[count - 1].rightSide,
+        //   fontSize,
+        //   width / 2,
+        //   height,
+        //   width / 2,
+        //   "blue"
+        // );
+        ctxFillText(ctx, data.items[count - 1].rightSide, fontSize, width / 2, height, 'center', 'center', "blue", width / 2)
       }
       ctx.fillStyle = "black";
 
