@@ -40,7 +40,7 @@ const shuffle = ([...array]) => {
 
 // 配列シャッフルロジック
 const loop = (loopCount, array) => {
-  let _array = []
+  const _array = [];
   for (let i = 0; i < loopCount; i++) {
     _array.push(...array)
   }
