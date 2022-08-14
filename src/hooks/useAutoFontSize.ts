@@ -1,4 +1,4 @@
-import React, { useState, useRef, useLayoutEffect, useEffect } from "react";
+import { useState, useLayoutEffect, useEffect } from "react";
 import stringWidth from "string-width";
 
 export const useAutoFontSize = (targetRef, text) => {
@@ -10,7 +10,6 @@ export const useAutoFontSize = (targetRef, text) => {
   }, [width, text])
 
   useLayoutEffect(() => {
-    // @ts-ignore
     const obs = new ResizeObserver((e) => setWidth(e[0].contentRect.width))
     obs.observe(targetRef.current)
     return () => obs.disconnect()

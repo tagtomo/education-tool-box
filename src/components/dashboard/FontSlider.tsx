@@ -8,24 +8,24 @@ type FontSliderProps = {
 
 export default function FontSlider({ disabled, onChange }: FontSliderProps): JSX.Element {
 
-  const marks = [
-    {
-      value: 100,
-      label: '100px',
-    },
-    {
-      value: 200,
-      label: '200px',
-    },
-    {
-      value: 300,
-      label: '300px',
-    },
-    {
-      value: 400,
-      label: '400px',
-    },
-  ];
+  // const marks = [
+  //   {
+  //     value: 100,
+  //     label: '100px',
+  //   },
+  //   {
+  //     value: 200,
+  //     label: '200px',
+  //   },
+  //   {
+  //     value: 300,
+  //     label: '300px',
+  //   },
+  //   {
+  //     value: 400,
+  //     label: '400px',
+  //   },
+  // ];
 
 
   const valuetext = (value: number) => {

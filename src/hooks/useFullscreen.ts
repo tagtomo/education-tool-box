@@ -8,10 +8,6 @@ export function useFullScreen(ref?: React.RefObject<HTMLElement>) {
     }
   }
 
-  const isFullScreenElement = (el: HTMLElement = document.documentElement) => {
-    return document.fullscreenElement === el;
-  }
-
   // access various exit fullscreen methods
   const closeFullScreen = () => {
     if (document.exitFullscreen !== undefined) {
