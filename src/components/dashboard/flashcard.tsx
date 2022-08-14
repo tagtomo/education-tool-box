@@ -12,6 +12,7 @@ import { FlashCardCanvas } from "./FlashCardCanvas";
 import { useCanvasRecorder } from "./useCanvasRecorder";
 import { useFlashCardData } from "./useFlashCardData";
 import FlashCardData from "./FlashCardData";
+import LoopCountSlider from "./LoopCountSlider";
 import FontSlider from "./FontSlider";
 // ----------------------------------------------------------------------
 declare global {
@@ -37,6 +38,15 @@ const shuffle = ([...array]) => {
   return array;
 }
 
+// 配列シャッフルロジック
+const loop = (loopCount, array) => {
+  let _array = []
+  for (let i = 0; i < loopCount; i++) {
+    _array.push(...array)
+  }
+  return _array;
+}
+
 export default function FlashcardComponent(): JSX.Element {
   const resolution = [
     { type: "4k", width: 3840, height: 2160 },
@@ -48,6 +58,7 @@ export default function FlashcardComponent(): JSX.Element {
   const [shuffleChecked, setShuffleChecked] = React.useState(true);
   const [recChecked, setRecChecked] = React.useState(true);
   const [fontSize, setFontSize] = React.useState(20);
+  const [loopCount, setLoopCount] = React.useState(1);
   // const { open } = useFullScreen(flashCardCanvasRef);
   const [isPlay, setIsPlay] = useState(false);
   const { isReady, loadData, onFileInputChange } = useFlashCardData();
@@ -61,6 +72,10 @@ export default function FlashcardComponent(): JSX.Element {
     setRecChecked((prev) => !prev);
   };
 
+  const changeLoopCount = (e: any) => {
+    setLoopCount(e.target.value);
+  };
+
   const changeFontSize = (e: any) => {
     setFontSize(e.target.value);
   };
@@ -72,14 +87,15 @@ export default function FlashcardComponent(): JSX.Element {
 
   const onPlay = () => {
     if (shuffleChecked) {
+      console.log(loadData)
       setInData({
         ...loadData,
-        items: shuffle(loadData.items)
+        items: loop(loopCount, shuffle(loadData.items))
       });
     } else {
       setInData({
         ...loadData,
-        items: loadData.items
+        items: loop(loopCount, loadData.items)
       });
     }
     if (recChecked) {
@@ -113,6 +129,7 @@ export default function FlashcardComponent(): JSX.Element {
             style={{ height: dispalyHeight, width: dispalyWidth }}
             elmRef={flashCardCanvasRef}
             fontSize={fontSize}
+            loopCount={loopCount}
           />
           <Box sx={{
             position: "relative",
@@ -135,6 +152,11 @@ export default function FlashcardComponent(): JSX.Element {
                 disabled={isPlay}
                 label="録画"
                 control={<Switch size="small" checked={recChecked} onChange={toggleRecChecked} />}
+              />
+              <FormControlLabel
+                disabled={isPlay}
+                label="ループ回数"
+                control={<LoopCountSlider disabled={isPlay} onChange={changeLoopCount} />}
               />
               <FormControlLabel
                 disabled={isPlay}

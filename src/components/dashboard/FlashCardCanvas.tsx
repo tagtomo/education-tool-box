@@ -19,6 +19,7 @@ export type FlashCardCanvasProps = {
   style: React.CSSProperties;
   elmRef: RefObject<HTMLCanvasElement>
   fontSize: number;
+  loopCount: number;
 };
 
 const getTime = () => {
@@ -34,44 +35,14 @@ export const FlashCardCanvas: FC<FlashCardCanvasProps> = ({
   flashTime,
   style,
   elmRef,
-  fontSize
+  fontSize,
+  loopCount
 }) => {
   useEffect(() => {
     console.info(data);
   }, [data]);
   let startTime = getTime();
   let count = 0;
-
-  // const calcFontSize = (width: number) => {
-  //   let fontSize: number;
-  //   if (width < 600) {
-  //     fontSize = 50;
-  //   } else if (width < 1000) {
-  //     fontSize = 100;
-  //   } else {
-  //     fontSize = 300;
-  //   }
-  //   return fontSize;
-  // };
-
-  // テキストのセンタリング表示
-  // const centerText = (
-  //   ctx: CanvasRenderingContext2D,
-  //   text: string,
-  //   fontSize: number,
-  //   width: number,
-  //   height: number,
-  //   paddingLeft = 0,
-  //   fillStyle = "black"
-  // ) => {
-  //   ctx.save(); // 処理前設定保存
-  //   ctx.beginPath();
-  //   ctx.font = `bold ${fontSize}px Arial, meiryo, sans-serif`;
-  //   ctx.fillStyle = fillStyle;
-  //   ctx.textAlign = "center";
-  //   ctx.fillText(text, width / 2 + paddingLeft, height / 2);
-  //   ctx.restore(); // 処理前設定の戻し
-  // };
 
   const ctxFillText = (
     ctx: CanvasRenderingContext2D,
@@ -123,11 +94,9 @@ export const FlashCardCanvas: FC<FlashCardCanvasProps> = ({
       return;
     }
     // 初期設定
-    // const fontSize = calcFontSize(width);
     ctx.font = `bold ${fontSize}px Arial, meiryo, sans-serif`;
     ctx.clearRect(0, 0, width, height);
     backgroundColor(ctx, "oldlace");
-    // centerText(ctx, data.title, fontSize, width, height);
     ctxFillText(ctx, data.title, fontSize, width, height, 'center', 'center')
     if (!isPlay) {
       return;
@@ -137,7 +106,6 @@ export const FlashCardCanvas: FC<FlashCardCanvasProps> = ({
     if (data.items.length < count) {
       ctx.clearRect(0, 0, width, height);
       backgroundColor(ctx, "oldlace");
-      // centerText(ctx, data.endText, fontSize, width, height);
       ctxFillText(ctx, data.endText, fontSize, width, height, 'center', 'center')
       return;
     }
@@ -145,23 +113,12 @@ export const FlashCardCanvas: FC<FlashCardCanvasProps> = ({
     if (count <= 0) {
       ctx.clearRect(0, 0, width, height);
       backgroundColor(ctx, "oldlace");
-      // centerText(ctx, data.title, fontSize, width, height);
       ctxFillText(ctx, data.title, fontSize, width, height, 'center', 'center')
     } else {
       ctx.clearRect(0, 0, width, height);
       backgroundColor(ctx, "oldlace");
-      // centerText(ctx, data.items[count - 1].leftSide, fontSize, width / 2, height);
       ctxFillText(ctx, data.items[count - 1].leftSide, fontSize, width / 2, height, 'center', 'center')
       if (elapsedTime > flashTime) {
-        // centerText(
-        //   ctx,
-        //   data.items[count - 1].rightSide,
-        //   fontSize,
-        //   width / 2,
-        //   height,
-        //   width / 2,
-        //   "blue"
-        // );
         ctxFillText(ctx, data.items[count - 1].rightSide, fontSize, width / 2, height, 'center', 'center', "blue", width / 2)
       }
       ctx.fillStyle = "black";
