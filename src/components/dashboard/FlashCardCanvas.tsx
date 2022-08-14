@@ -19,7 +19,6 @@ export type FlashCardCanvasProps = {
   style: React.CSSProperties;
   elmRef: RefObject<HTMLCanvasElement>
   fontSize: number;
-  loopCount: number;
 };
 
 const getTime = () => {
@@ -36,7 +35,6 @@ export const FlashCardCanvas: FC<FlashCardCanvasProps> = ({
   style,
   elmRef,
   fontSize,
-  loopCount
 }) => {
   useEffect(() => {
     console.info(data);

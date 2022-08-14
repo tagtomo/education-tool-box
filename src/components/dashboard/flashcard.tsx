@@ -129,7 +129,6 @@ export default function FlashcardComponent(): JSX.Element {
             style={{ height: dispalyHeight, width: dispalyWidth }}
             elmRef={flashCardCanvasRef}
             fontSize={fontSize}
-            loopCount={loopCount}
           />
           <Box sx={{
             position: "relative",
