@@ -1,6 +1,5 @@
 import React from 'react';
-
-import Slider from '@material-ui/core/Slider';
+import Slider from '@mui/material/Slider';
 
 type FontSliderProps = {
   disabled: boolean;
@@ -9,24 +8,24 @@ type FontSliderProps = {
 
 export default function FontSlider({ disabled, onChange }: FontSliderProps): JSX.Element {
 
-  // const marks = [
-  //   {
-  //     value: 10,
-  //     label: '10px',
-  //   },
-  //   {
-  //     value: 20,
-  //     label: '20px',
-  //   },
-  //   {
-  //     value: 30,
-  //     label: '30px',
-  //   },
-  //   {
-  //     value: 40,
-  //     label: '40px',
-  //   },
-  // ];
+  const marks = [
+    {
+      value: 100,
+      label: '100px',
+    },
+    {
+      value: 200,
+      label: '200px',
+    },
+    {
+      value: 300,
+      label: '300px',
+    },
+    {
+      value: 400,
+      label: '400px',
+    },
+  ];
 
 
   const valuetext = (value: number) => {

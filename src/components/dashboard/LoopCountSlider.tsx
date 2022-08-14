@@ -1,6 +1,5 @@
 import React from 'react';
-
-import Slider from '@material-ui/core/Slider';
+import Slider from '@mui/material/Slider';
 
 type LoopCountSliderProps = {
   disabled: boolean;
@@ -13,18 +12,16 @@ export default function LoopCountSlider({ disabled, onChange }: LoopCountSliderP
   }
 
   return (
-    <>
-      <Slider
-        disabled={disabled}
-        defaultValue={1}
-        getAriaValueText={valuetext}
-        aria-labelledby="discrete-slider-custom"
-        step={1}
-        min={1}
-        max={5}
-        valueLabelDisplay="auto"
-        onChange={onChange}
-      />
-    </ >
+    <Slider
+      disabled={disabled}
+      defaultValue={1}
+      getAriaValueText={valuetext}
+      aria-labelledby="discrete-slider-custom"
+      step={1}
+      min={1}
+      max={5}
+      valueLabelDisplay="auto"
+      onChange={onChange}
+    />
   );
 }
