@@ -87,7 +87,6 @@ export default function FlashcardComponent(): JSX.Element {
 
   const onPlay = () => {
     if (shuffleChecked) {
-      console.log(loadData)
       setInData({
         ...loadData,
         items: loop(loopCount, shuffle(loadData.items))
