@@ -1,14 +1,10 @@
 import React, { useState } from 'react';
 // material
-import Switch from '@material-ui/core/Switch';
-import FormGroup from '@material-ui/core/FormGroup';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-
 import { alpha, experimentalStyled as styled } from '@material-ui/core/styles';
-import { Button, Container, Box } from '@material-ui/core';
+import { Box, Button, Container, FormControlLabel, FormGroup, Switch } from '@mui/material';
+
 import { FlashCardCanvas } from "./FlashCardCanvas";
 
-// import { useFullScreen } from '../../hooks/useFullscreen';
 import { useCanvasRecorder } from "./useCanvasRecorder";
 import { useFlashCardData } from "./useFlashCardData";
 import FlashCardData from "./FlashCardData";

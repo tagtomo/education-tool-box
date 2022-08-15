@@ -34,8 +34,6 @@ export default function FlashcardForm(): JSX.Element {
   );
 }
 
-// type FlashcardFormDetailProps = {};
-
 const FlashcardFormDetail: React.FC = () => {
   const {
     control,

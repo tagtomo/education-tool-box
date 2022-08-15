@@ -1,6 +1,6 @@
 import Head from "next/head";
 import { forwardRef, ReactNode } from "react";
-import { Box, BoxProps } from "@material-ui/core";
+import { Box, BoxProps } from '@mui/material';
 
 interface PageProps extends BoxProps {
   children: ReactNode;
