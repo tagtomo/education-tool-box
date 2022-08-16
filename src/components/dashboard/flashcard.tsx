@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 // material
 import { alpha, experimentalStyled as styled } from '@material-ui/core/styles';
-import { Box, Button, Container, FormControlLabel, FormGroup, Switch } from '@mui/material';
+import { Button, Container, FormControlLabel, FormGroup, Switch, Stack } from '@mui/material';
 
 import { FlashCardCanvas } from "./FlashCardCanvas";
 
@@ -49,13 +49,11 @@ export default function FlashcardComponent(): JSX.Element {
     { type: "FullHD", width: 1920, height: 1080 },
   ]
   const flashCardCanvasRef = React.useRef<HTMLCanvasElement>(null);
-  const displayRef = React.useRef<HTMLElement>(null);
   const { recording, initRecorder, startRecording, endRecording } = useCanvasRecorder(flashCardCanvasRef);
   const [shuffleChecked, setShuffleChecked] = React.useState(true);
   const [recChecked, setRecChecked] = React.useState(true);
   const [fontSize, setFontSize] = React.useState(20);
   const [loopCount, setLoopCount] = React.useState(1);
-  // const { open } = useFullScreen(flashCardCanvasRef);
   const [isPlay, setIsPlay] = useState(false);
   const { isReady, loadData, onFileInputChange } = useFlashCardData();
   const [inData, setInData] = useState(loadData);
@@ -111,31 +109,28 @@ export default function FlashcardComponent(): JSX.Element {
   return (
     <RootStyle>
       <Container maxWidth="lg">
-        <Box ref={displayRef} sx={{
-          display: "inline-block",
-          position: "relative"
-        }}>
-          <FlashCardCanvas
-            width={width}
-            height={height}
-            isPlay={isPlay}
-            data={inData}
-            flashTime={3000}
-            style={{ height: dispalyHeight, width: dispalyWidth }}
-            elmRef={flashCardCanvasRef}
-            fontSize={fontSize}
-          />
-          <Box sx={{
-            position: "relative",
-            left: "10px"
-          }}>
+        <Stack direction="row" spacing={10}>
+          <Stack direction="column">
+
+            <FlashCardCanvas
+              width={width}
+              height={height}
+              isPlay={isPlay}
+              data={inData}
+              flashTime={3000}
+              style={{ height: dispalyHeight, width: dispalyWidth }}
+              elmRef={flashCardCanvasRef}
+              fontSize={fontSize}
+            />
             {isPlay ? (
-              <Button disabled={!isReady}
+              <Button variant="outlined" disabled={!isReady}
                 onClick={onStop}>停止</Button>
             ) : (
-              <Button disabled={!isReady} onClick={onPlay}>再生</Button>
+              <Button variant="outlined" disabled={!isReady} onClick={onPlay}>再生</Button>
             )}
             {recording ? (<p>録画中...</p>) : null}
+          </Stack>
+          <Stack direction="column" sx={{ width: "100px" }}>
             <FormGroup>
               <FormControlLabel
                 disabled={isPlay}
@@ -158,14 +153,11 @@ export default function FlashcardComponent(): JSX.Element {
                 control={<FontSlider disabled={isPlay} onChange={changeFontSize} />}
               />
             </FormGroup>
-            {/* <Button onClick={open}>フルスクリーン</Button> */}
-          </Box>
-        </Box>
-        <Box>
-          <FlashCardData
-            loadData={loadData}
-            onFileInputChange={onFileInputChange} />
-        </Box>
+            <FlashCardData
+              loadData={loadData}
+              onFileInputChange={onFileInputChange} />
+          </Stack>
+        </Stack>
       </Container>
 
     </RootStyle >
