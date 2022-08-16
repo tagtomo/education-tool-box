@@ -44,7 +44,9 @@ export default function FontSlider({ disabled, onChange }: FontSliderProps): JSX
         max={1000}
         valueLabelDisplay="auto"
         onChange={onChange}
-      // marks={marks}
+        // marks={marks}
+        sx={{ width: "50%" }}
+
       />
     </ >
   );

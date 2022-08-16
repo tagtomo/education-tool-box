@@ -1,7 +1,11 @@
 import React, { useState } from 'react';
 // material
 import { alpha, experimentalStyled as styled } from '@material-ui/core/styles';
-import { Button, Container, FormControlLabel, FormGroup, Switch, Stack } from '@mui/material';
+import {
+  Button,
+  Grid,
+  Container, FormControlLabel, FormGroup, Switch, Stack
+} from '@mui/material';
 
 import { FlashCardCanvas } from "./FlashCardCanvas";
 
@@ -109,55 +113,66 @@ export default function FlashcardComponent(): JSX.Element {
   return (
     <RootStyle>
       <Container maxWidth="lg">
-        <Stack direction="row" spacing={10}>
-          <Stack direction="column">
-
-            <FlashCardCanvas
-              width={width}
-              height={height}
-              isPlay={isPlay}
-              data={inData}
-              flashTime={3000}
-              style={{ height: dispalyHeight, width: dispalyWidth }}
-              elmRef={flashCardCanvasRef}
-              fontSize={fontSize}
-            />
-            {isPlay ? (
-              <Button variant="outlined" disabled={!isReady}
-                onClick={onStop}>停止</Button>
-            ) : (
-              <Button variant="outlined" disabled={!isReady} onClick={onPlay}>再生</Button>
-            )}
-            {recording ? (<p>録画中...</p>) : null}
-          </Stack>
-          <Stack direction="column" sx={{ width: "100px" }}>
-            <FormGroup>
-              <FormControlLabel
-                disabled={isPlay}
-                label="シャッフル"
-                control={<Switch size="small" checked={shuffleChecked} onChange={toggleShuffleChecked} />}
+        <Grid container spacing={2}>
+          <Grid xs={6} sx={{ minWidth: "360px" }}>
+            <Stack direction="column">
+              <FlashCardCanvas
+                width={width}
+                height={height}
+                isPlay={isPlay}
+                data={inData}
+                flashTime={3000}
+                style={{ height: dispalyHeight, width: dispalyWidth }}
+                elmRef={flashCardCanvasRef}
+                fontSize={fontSize}
               />
-              <FormControlLabel
-                disabled={isPlay}
-                label="録画"
-                control={<Switch size="small" checked={recChecked} onChange={toggleRecChecked} />}
-              />
-              <FormControlLabel
-                disabled={isPlay}
-                label="ループ回数"
-                control={<LoopCountSlider disabled={isPlay} onChange={changeLoopCount} />}
-              />
-              <FormControlLabel
-                disabled={isPlay}
-                label="フォントサイズ"
-                control={<FontSlider disabled={isPlay} onChange={changeFontSize} />}
-              />
-            </FormGroup>
-            <FlashCardData
-              loadData={loadData}
-              onFileInputChange={onFileInputChange} />
-          </Stack>
-        </Stack>
+              {isPlay ? (
+                <Button variant="outlined" disabled={!isReady}
+                  onClick={onStop}>停止</Button>
+              ) : (
+                <Button variant="outlined" disabled={!isReady} onClick={onPlay}>再生</Button>
+              )}
+              {recording ? (<p>録画中...</p>) : null}
+            </Stack>
+          </Grid>
+          <Grid xs={6} sx={{ minWidth: "360px" }}>
+            <Stack direction="column" sx={{ padding: "30px" }}>
+              <FormGroup>
+                <FormControlLabel
+                  disabled={isPlay}
+                  label="シャッフル"
+                  labelPlacement="start"
+                  control={<Switch size="small" checked={shuffleChecked} onChange={toggleShuffleChecked} />}
+                  sx={{ margin: 0 }}
+                />
+                <FormControlLabel
+                  disabled={isPlay}
+                  label="録画"
+                  labelPlacement="start"
+                  control={<Switch size="small" checked={recChecked} onChange={toggleRecChecked} />}
+                  sx={{ margin: 0 }}
+                />
+                <FormControlLabel
+                  disabled={isPlay}
+                  label="ループ回数"
+                  labelPlacement="start"
+                  control={<LoopCountSlider disabled={isPlay} onChange={changeLoopCount} />}
+                  sx={{ margin: 0, paddingLeft: "8px" }}
+                />
+                <FormControlLabel
+                  disabled={isPlay}
+                  label="フォントサイズ"
+                  labelPlacement="start"
+                  control={<FontSlider disabled={isPlay} onChange={changeFontSize} />}
+                  sx={{ margin: 0, paddingLeft: "8px" }}
+                />
+              </FormGroup>
+              <FlashCardData
+                loadData={loadData}
+                onFileInputChange={onFileInputChange} />
+            </Stack>
+          </Grid>
+        </Grid>
       </Container>
 
     </RootStyle >

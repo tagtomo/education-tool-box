@@ -22,6 +22,7 @@ export default function LoopCountSlider({ disabled, onChange }: LoopCountSliderP
       max={5}
       valueLabelDisplay="auto"
       onChange={onChange}
+      sx={{ width: "50%" }}
     />
   );
 }
