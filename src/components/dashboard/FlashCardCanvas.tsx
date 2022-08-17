@@ -42,6 +42,23 @@ export const FlashCardCanvas: FC<FlashCardCanvasProps> = ({
   let startTime = getTime();
   let count = 0;
 
+  // info表示用canvas
+  const elmInfoRef = React.useRef<HTMLCanvasElement>(null)
+  const getInfoContext = (): CanvasRenderingContext2D => {
+    const canvas: any = elmInfoRef.current;
+    return canvas.getContext('2d');
+  };
+  useEffect(() => {
+    const ctx: CanvasRenderingContext2D = getInfoContext();
+    ctx.clearRect(0, 0, width, height);
+    ctx.font = `bold 60px Arial, meiryo, sans-serif`;
+    ctx.fillText("インフォメーション", 50, 100);
+    ctx.fillText("シャッフル：ON", 50, 200);
+    ctx.fillText(`フォントサイズ：${fontSize}px`, 50, 300);
+    ctx.fillText(`ループ回数：${fontSize}回`, 50, 400);
+    ctx.save();
+  }, [fontSize]);
+
   const ctxFillText = (
     ctx: CanvasRenderingContext2D,
     text,
@@ -101,6 +118,13 @@ export const FlashCardCanvas: FC<FlashCardCanvasProps> = ({
     }
     // 経過時間算出
     const elapsedTime = getTime() - startTime;
+
+    // // デバッグ表示
+    // ctx.font = `bold 200px Arial, meiryo, sans-serif`;
+    // ctx.fillText(count.toString(), 500, 400);
+    // ctx.fillText(startTime.toString(), 500, 450);
+    // ctx.fillText(elapsedTime.toString(), 500, 500);
+
     if (data.items.length < count) {
       ctx.clearRect(0, 0, width, height);
       backgroundColor(ctx, "oldlace");
@@ -120,12 +144,6 @@ export const FlashCardCanvas: FC<FlashCardCanvasProps> = ({
         ctxFillText(ctx, data.items[count - 1].rightSide, fontSize, width / 2, height, 'center', 'center', "blue", width / 2)
       }
       ctx.fillStyle = "black";
-
-      // デバッグ表示
-      // ctx.font = `bold 20px Arial, meiryo, sans-serif`;
-      // ctx.fillText(count.toString(), 500, 400);
-      // ctx.fillText(startTime.toString(), 500, 450);
-      // ctx.fillText(elapsedTime.toString(), 500, 500);
     }
 
     // 遅延時間経過でカウントアップ
@@ -133,7 +151,11 @@ export const FlashCardCanvas: FC<FlashCardCanvasProps> = ({
       startTime = getTime();
       count++;
     }
+
   });
 
-  return <canvas ref={elmRef} width={width} height={height} style={style} />;
+  return <>
+    <canvas ref={elmRef} width={width} height={height} style={{ ...style, zIndex: 0 }} />
+    <canvas ref={elmInfoRef} width={width} height={height} style={{ ...style, position: "absolute", zIndex: 1 }} />
+  </>;
 };
