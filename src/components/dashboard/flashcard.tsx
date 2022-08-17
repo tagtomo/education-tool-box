@@ -55,8 +55,8 @@ export default function FlashcardComponent(): JSX.Element {
   const flashCardCanvasRef = React.useRef<HTMLCanvasElement>(null);
   const { recording, initRecorder, startRecording, endRecording } = useCanvasRecorder(flashCardCanvasRef);
   const [shuffleChecked, setShuffleChecked] = React.useState(true);
-  const [recChecked, setRecChecked] = React.useState(true);
-  const [fontSize, setFontSize] = React.useState(20);
+  const [isRecMode, setIsRecMode] = React.useState(false);
+  const [fontSize, setFontSize] = React.useState(300);
   const [loopCount, setLoopCount] = React.useState(1);
   const [isPlay, setIsPlay] = useState(false);
   const { isReady, loadData, onFileInputChange } = useFlashCardData();
@@ -64,10 +64,6 @@ export default function FlashcardComponent(): JSX.Element {
 
   const toggleShuffleChecked = () => {
     setShuffleChecked((prev) => !prev);
-  };
-
-  const toggleRecChecked = () => {
-    setRecChecked((prev) => !prev);
   };
 
   const changeLoopCount = (e: any) => {
@@ -95,19 +91,35 @@ export default function FlashcardComponent(): JSX.Element {
         items: loop(loopCount, loadData.items)
       });
     }
-    if (recChecked) {
-      initRecorder();
-      startRecording();
+
+    setIsPlay(true);
+  };
+
+  const onRecPlay = () => {
+    setIsRecMode(true)
+    if (shuffleChecked) {
+      setInData({
+        ...loadData,
+        items: loop(loopCount, shuffle(loadData.items))
+      });
+    } else {
+      setInData({
+        ...loadData,
+        items: loop(loopCount, loadData.items)
+      });
     }
 
+    initRecorder();
+    startRecording();
     setIsPlay(true);
   };
 
   const onStop = () => {
     setIsPlay(false);
-    if (recChecked) {
+    if (isRecMode) {
       endRecording();
     }
+    setIsRecMode(false)
   };
 
   return (
@@ -126,12 +138,20 @@ export default function FlashcardComponent(): JSX.Element {
                 elmRef={flashCardCanvasRef}
                 fontSize={fontSize}
               />
-              {isPlay ? (
-                <Button variant="outlined" disabled={!isReady}
-                  onClick={onStop}>停止</Button>
-              ) : (
-                <Button variant="outlined" disabled={!isReady} onClick={onPlay}>再生</Button>
-              )}
+              <Stack direction="row">
+                {isPlay ? (
+                  <Button variant="outlined" disabled={!isReady || isPlay && isRecMode}
+                    onClick={onStop}>停止</Button>
+                ) : (
+                  <Button variant="outlined" disabled={!isReady || isPlay && isRecMode} onClick={onPlay}>再生</Button>
+                )}
+                {isPlay && isRecMode ? (
+                  <Button variant="outlined" disabled={!isReady || isPlay && !isRecMode}
+                    onClick={onStop}>停止</Button>
+                ) : (
+                  <Button variant="outlined" disabled={!isReady || isPlay && !isRecMode} onClick={onRecPlay}>録画再生</Button>
+                )}
+              </Stack>
               {recording ? (<p>録画中...</p>) : null}
             </Stack>
           </Grid>
@@ -143,13 +163,6 @@ export default function FlashcardComponent(): JSX.Element {
                   label="シャッフル"
                   labelPlacement="start"
                   control={<Switch size="small" checked={shuffleChecked} onChange={toggleShuffleChecked} />}
-                  sx={{ margin: 0 }}
-                />
-                <FormControlLabel
-                  disabled={isPlay}
-                  label="録画"
-                  labelPlacement="start"
-                  control={<Switch size="small" checked={recChecked} onChange={toggleRecChecked} />}
                   sx={{ margin: 0 }}
                 />
                 <FormControlLabel
