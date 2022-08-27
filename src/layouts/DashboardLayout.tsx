@@ -1,5 +1,6 @@
-import React from 'react';
-import { experimentalStyled as styled } from '@material-ui/core/styles';
+import React, { ReactNode } from 'react';
+
+import { styled } from '@mui/material/styles';
 
 import Navi from '../components/Navi';
 
@@ -25,8 +26,11 @@ const MainStyle = styled('div')(({ theme }) => ({
   }
 }));
 
-const DashboardLayout: React.FC = (props) => {
-  const { children } = props;
+type Props = {
+  children: ReactNode;
+};
+
+const DashboardLayout: React.FC = ({ children }: Props) => {
   return (
     <RootStyle>
       <Navi title="教育ツールボックス" />

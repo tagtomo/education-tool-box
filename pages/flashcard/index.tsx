@@ -1,7 +1,7 @@
-import { experimentalStyled as styled } from "@material-ui/core/styles";
+import { styled } from '@mui/material/styles';
 import Page from "../../src/components/Page";
-import Paper from '@material-ui/core/Paper';
-import Typography from "@material-ui/core/Typography";
+import Paper from '@mui/material/Paper';
+import Typography from "@mui/material/Typography";
 
 import FlashcardComponent from '../../src/components/dashboard/flashcard';
 import FlashCardManual from '../../src/components/dashboard/FlashCardManual';

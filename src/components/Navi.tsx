@@ -1,22 +1,22 @@
 import React, { useState } from "react";
-import { makeStyles, Theme } from '@material-ui/core/styles';
+import { makeStyles } from '@mui/styles';
+import { createTheme } from '@mui/material/styles';
 
-import AppBar from "@material-ui/core/AppBar";
-import Toolbar from "@material-ui/core/Toolbar";
-import Typography from "@material-ui/core/Typography";
-import IconButton from "@material-ui/core/IconButton";
-import MenuIcon from "@material-ui/icons/Menu";
-import Drawer from "@material-ui/core/Drawer";
+import AppBar from "@mui/material/AppBar";
+import Toolbar from "@mui/material/Toolbar";
+import Typography from "@mui/material/Typography";
+import IconButton from "@mui/material/IconButton";
+import MenuIcon from '@mui/icons-material/Menu';
+import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
+import DashboardIcon from '@mui/icons-material/Dashboard';
+import HomeIcon from '@mui/icons-material/Home';
+import Drawer from "@mui/material/Drawer";
 import clsx from "clsx";
-import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
-import Divider from "@material-ui/core/Divider";
-import List from "@material-ui/core/List";
-import ListItem from "@material-ui/core/ListItem";
-import ListItemIcon from "@material-ui/core/ListItemIcon";
-import ListItemText from "@material-ui/core/ListItemText";
-import DashboardIcon from "@material-ui/icons/Dashboard";
-
-import HomeIcon from '@material-ui/icons/Home';
+import Divider from "@mui/material/Divider";
+import List from "@mui/material/List";
+import ListItem from "@mui/material/ListItem";
+import ListItemIcon from "@mui/material/ListItemIcon";
+import ListItemText from "@mui/material/ListItemText";
 
 import Link from 'next/link';
 
@@ -24,75 +24,77 @@ type Props = {
   title: string;
 };
 
-const drawerWidth = 240;
+const drawerWidth = 160;
 const toolBarHeight = 48;
 
-const useStyles = makeStyles((theme: Theme) => ({
+
+const useStyles = makeStyles((theme) => ({
   root: {
     display: "flex"
   },
   toolbar: {
     paddingRight: 24 // keep right padding when drawer closed
   },
-  appBar: {
-    zIndex: theme.zIndex.drawer + 1,
-    transition: theme.transitions.create(["width", "margin"], {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen
-    })
-  },
-  appBarShift: {
-    marginLeft: drawerWidth,
-    width: `calc(100% - ${drawerWidth}px)`,
-    transition: theme.transitions.create(["width", "margin"], {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.enteringScreen
-    })
-  },
-  toolBar: {
-    minHeight: toolBarHeight,
-  },
-  appBarSpacer: {
-    minHeight: toolBarHeight,
-  },
-  menuButton: {
-    marginRight: 36
-  },
-  menuButtonHidden: {
-    display: "none"
-  },
-  drawerPaper: {
-    position: "relative",
-    whiteSpace: "nowrap",
-    width: drawerWidth,
-    transition: theme.transitions.create("width", {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.enteringScreen
-    })
-  },
-  drawerPaperClose: {
-    overflowX: "hidden",
-    transition: theme.transitions.create("width", {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen
-    }),
-    width: theme.spacing(7),
-    [theme.breakpoints.up("sm")]: {
-      width: theme.spacing(7)
-    }
-  },
+  // appBar: {
+  //   zIndex: theme.zIndex.drawer + 1,
+  //   transition: theme.transitions.create(["width", "margin"], {
+  //     easing: theme.transitions.easing.sharp,
+  //     duration: theme.transitions.duration.leavingScreen
+  //   })
+  // },
+  // appBarShift: {
+  //   marginLeft: drawerWidth,
+  //   width: `calc(100% - ${drawerWidth}px)`,
+  //   transition: theme.transitions.create(["width", "margin"], {
+  //     easing: theme.transitions.easing.sharp,
+  //     duration: theme.transitions.duration.enteringScreen
+  //   })
+  // },
+  // toolBar: {
+  //   minHeight: toolBarHeight,
+  // },
+  // appBarSpacer: {
+  //   minHeight: toolBarHeight,
+  // },
+  // menuButton: {
+  //   marginRight: 36
+  // },
+  // menuButtonHidden: {
+  //   display: "none"
+  // },
+  // drawerPaper: {
+  //   position: "relative",
+  //   whiteSpace: "nowrap",
+  //   width: drawerWidth,
+  //   transition: theme.transitions.create("width", {
+  //     easing: theme.transitions.easing.sharp,
+  //     duration: theme.transitions.duration.enteringScreen
+  //   })
+  // },
+  // drawerPaperClose: {
+  //   overflowX: "hidden",
+  //   transition: theme.transitions.create("width", {
+  //     easing: theme.transitions.easing.sharp,
+  //     duration: theme.transitions.duration.leavingScreen
+  //   }),
+  //   width: theme.spacing(7),
+  //   [theme.breakpoints.up("sm")]: {
+  //     width: theme.spacing(7)
+  //   }
+  // },
 
-  paper: {
-    padding: theme.spacing(2),
-    display: "flex",
-    overflow: "auto",
-    flexDirection: "column"
-  },
+  // paper: {
+  //   padding: theme.spacing(2),
+  //   display: "flex",
+  //   overflow: "auto",
+  //   flexDirection: "column"
+  // },
 }));
 
 const Navi: React.FC<Props> = (props): JSX.Element => {
   const classes = useStyles();
   const [open, setOpen] = useState(false);
+  const theme = createTheme();
 
   const menuList = [
     { text: "Home", path: "/", icon: <HomeIcon /> },
@@ -100,9 +102,11 @@ const Navi: React.FC<Props> = (props): JSX.Element => {
   ]
 
   const handleDrawerOpen = () => {
+    console.log("open")
     setOpen(true);
   };
   const handleDrawerClose = () => {
+    console.log("close")
     setOpen(false);
   };
 
@@ -110,17 +114,36 @@ const Navi: React.FC<Props> = (props): JSX.Element => {
     <div className={classes.root}>
       <AppBar
         position="fixed"
-        className={clsx(classes.appBar, open && classes.appBarShift)}
+        sx={{
+          width: open ? `calc(100% - ${drawerWidth}px)` : "100%",
+          zIndex: theme.zIndex.drawer + 1
+        }}
+      // className={clsx({
+      //   zIndex: theme.zIndex.drawer + 1,
+      //   transition: theme.transitions.create(["width", "margin"], {
+      //     easing: theme.transitions.easing.sharp,
+      //     duration: theme.transitions.duration.leavingScreen
+      //   })
+      // }, open && {
+      //   marginLeft: drawerWidth,
+      //   width: `calc(100% - ${drawerWidth}px)`,
+      //   transition: theme.transitions.create(["width", "margin"], {
+      //     easing: theme.transitions.easing.sharp,
+      //     duration: theme.transitions.duration.enteringScreen
+      //   })
+      // })}
       >
-        <Toolbar className={classes.toolBar}>
+        <Toolbar sx={{
+          paddingRight: 24 // keep right padding when drawer closed
+        }}>
           <IconButton
             edge="start"
             color="inherit"
             aria-label="open drawer"
             onClick={handleDrawerOpen}
             className={clsx(
-              classes.menuButton,
-              open && classes.menuButtonHidden
+              { marginRight: 36 },
+              open && { display: "none" }
             )}
           >
             <MenuIcon />
@@ -138,9 +161,44 @@ const Navi: React.FC<Props> = (props): JSX.Element => {
       </AppBar>
       <Drawer
         variant="permanent"
-        classes={{
-          paper: clsx(classes.drawerPaper, !open && classes.drawerPaperClose)
+        sx={{
+          width: open ? `${drawerWidth}px` : theme.spacing(7),
+          ".MuiPaper-root": {
+            position: open ? "fixed" : "relative"
+          }
         }}
+        // sx={{
+        //   paper: (theme) => ({
+        //     position: "relative",
+        //     whiteSpace: "nowrap",
+        //     // width: theme.spacing(100),
+        //     // transition: theme.transitions.create("width", {
+        //     //   easing: theme.transitions.easing.sharp,
+        //     //   duration: theme.transitions.duration.enteringScreen
+        //     // })
+        //   })
+        // }}
+        // classes={{
+        //   paper: clsx({
+        //     position: "relative",
+        //     whiteSpace: "nowrap",
+        //     width: drawerWidth,
+        //     transition: theme.transitions.create("width", {
+        //       easing: theme.transitions.easing.sharp,
+        //       duration: theme.transitions.duration.enteringScreen
+        //     })
+        //   }, !open && {
+        //     overflowX: "hidden",
+        //     transition: theme.transitions.create("width", {
+        //       easing: theme.transitions.easing.sharp,
+        //       duration: theme.transitions.duration.leavingScreen
+        //     }),
+        //     width: theme.spacing(7),
+        //     [theme.breakpoints.up("sm")]: {
+        //       width: theme.spacing(7)
+        //     }
+        //   })
+        // }}
         open={open}
       >
         <IconButton onClick={handleDrawerClose} sx={{

@@ -1,12 +1,12 @@
 import React from 'react';
-import { Container, Box } from '@material-ui/core';
+import { Container, Box } from '@mui/material';
 import Markdown from '../Markdown'
 
-import Stepper from "@material-ui/core/Stepper";
-import Step from "@material-ui/core/Step";
-import StepButton from "@material-ui/core/StepButton";
-import Button from "@material-ui/core/Button";
-import Typography from "@material-ui/core/Typography";
+import Stepper from "@mui/material/Stepper";
+import Step from "@mui/material/Step";
+import StepButton from "@mui/material/StepButton";
+import Button from "@mui/material/Button";
+import Typography from "@mui/material/Typography";
 
 type FlashcardManualProps = {
   steps: any;

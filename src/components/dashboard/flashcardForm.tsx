@@ -1,11 +1,10 @@
 import React from 'react';
 // material
 import { useForm, SubmitHandler, FormProvider, useFormContext, useFieldArray } from "react-hook-form";
-import { TextField } from "@material-ui/core";
-import { IconButton } from "@material-ui/core";
-import AddIcon from "@material-ui/icons/Add";
-import DeleteIcon from "@material-ui/icons/Delete";
-
+import { TextField } from "@mui/material";
+import { IconButton } from "@mui/material";
+import DeleteIcon from '@mui/icons-material/Delete';
+import AddIcon from '@mui/icons-material/Add';
 // ----------------------------------------------------------------------
 type FlashCard = {
   leftSide: string;

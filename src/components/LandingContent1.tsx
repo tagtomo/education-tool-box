@@ -1,6 +1,9 @@
 // material
-import { alpha, useTheme, experimentalStyled as styled } from '@material-ui/core/styles';
-import { Box, Grid, Button, Container, Typography, Card, CardMedia, CardContent } from '@material-ui/core';
+// import { alpha, useTheme, experimentalStyled as styled } from '@material-ui/core/styles';
+
+import { alpha, styled } from '@mui/material/styles';
+
+import { Box, Grid, Button, Container, Typography, Card, CardMedia, CardContent } from '@mui/material';
 //
 import { varFadeInUp, MotionInView } from './animate';
 import Link from 'next/link';
@@ -28,8 +31,8 @@ const ContentStyle = styled('div')(({ theme }) => ({
 // ----------------------------------------------------------------------
 
 export default function LandingContent1(): JSX.Element {
-  const theme = useTheme();
-  const isLight = theme.palette.mode === 'light';
+  // const theme = useTheme();
+  // const isLight = theme.palette.mode === 'light';
 
   return (
     <RootStyle>
@@ -57,7 +60,7 @@ export default function LandingContent1(): JSX.Element {
                 <Typography
                   sx={{
                     mb: 5,
-                    color: isLight ? 'text.secondary' : 'common.white'
+                    // color: isLight ? 'text.secondary' : 'common.white'
                   }}
                 >
                   フラッシュカードとは、絵や記号の書いてあるカードをリズムに合わせてテンポよく見せることで、その絵や記号を記憶していくものである。 カードの使い方（テンポ）によって、左脳、右脳両方に刺激を与えることが出来る。 特にフラッシュカードはテンポ速く見せることで右脳が鍛えられ、見て記憶するという能力がつく。

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 // material
-import { alpha, experimentalStyled as styled } from '@material-ui/core/styles';
+import { alpha, styled } from '@mui/material/styles';
 import {
   Button,
   Grid,

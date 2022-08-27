@@ -1,4 +1,4 @@
-import { experimentalStyled as styled } from "@material-ui/core/styles";
+import { styled } from '@mui/material/styles';
 import Page from "../src/components/Page";
 
 import LandingHero from '../src/components/LandingHero';
