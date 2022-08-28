@@ -1,10 +1,14 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 // material
 import { useForm, SubmitHandler, FormProvider, useFormContext, useFieldArray } from "react-hook-form";
 import { TextField } from "@mui/material";
 import { IconButton } from "@mui/material";
 import DeleteIcon from '@mui/icons-material/Delete';
 import AddIcon from '@mui/icons-material/Add';
+import yup from "../../utils/yup.locale";
+import { FlashcardFormValues } from "../../@types/flashcard";
+import { yupResolver } from "@hookform/resolvers/yup";
+
 // ----------------------------------------------------------------------
 type FlashCard = {
   leftSide: string;
@@ -14,12 +18,51 @@ type FormValues = {
   flashcards: FlashCard[];
 };
 
+type FormValuesProps = FlashcardFormValues;
+
 export default function FlashcardForm(): JSX.Element {
-  const methods = useForm<FormValues>({
+
+  // yup schema構築
+  const FlashcardSchema = yup.object().shape({
+    title: yup.string().label("タイトル").max(100).required(),
+    endTitle: yup.string().label("終了タイトル").max(100).required(),
+    items: yup.array().of(
+      yup.object().shape({
+        leftSide: yup.string().label("左側").max(100).required(),
+        rightSide: yup.string().label("右側").max(100),
+      })
+    ),
+    shaffle: yup.string().label("シャッフル").max(100).required(),
+    loopCount: yup.string().label("繰返し回数").max(100).required(),
+    fontSize: yup.string().label("フォントサイズ").max(100).required(),
+  })
+
+  const defaultValues: FormValuesProps = useMemo(
+    () => ({
+      flashcard: {
+        title: "",
+        endTitle: "",
+        shaffle: true,
+        loopCount: 1,
+        fontSize: 300,
+        items: [],
+      }
+    }), [])
+
+  // const methods = useForm<FormValues>({
+  // });
+
+  const methods = useForm<FormValuesProps>({
+    mode: "onSubmit",
+    reValidateMode: "onChange",
+    resolver: yupResolver(FlashcardSchema),
+    defaultValues,
+    shouldFocusError: true,
   });
+
   const { handleSubmit } = methods;
 
-  const onSubmit: SubmitHandler<FormValues> = (data) => {
+  const onSubmit = (data) => {
     console.info(data)
   };
 
@@ -39,6 +82,7 @@ const FlashcardFormDetail: React.FC = () => {
     register,
     formState: { errors }
   } = useFormContext();
+
   const { fields, append, remove } = useFieldArray({
     control,
     name: `flashcards`

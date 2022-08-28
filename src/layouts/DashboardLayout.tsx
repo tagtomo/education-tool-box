@@ -30,12 +30,12 @@ type Props = {
   children: ReactNode;
 };
 
-const DashboardLayout: React.FC = ({ children }: Props) => {
+const DashboardLayout = (props: Props) => {
   return (
     <RootStyle>
       <Navi title="教育ツールボックス" />
       <MainStyle>
-        {children}
+        {props.children}
       </MainStyle>
     </RootStyle>
   )

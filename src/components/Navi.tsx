@@ -102,11 +102,9 @@ const Navi: React.FC<Props> = (props): JSX.Element => {
   ]
 
   const handleDrawerOpen = () => {
-    console.log("open")
     setOpen(true);
   };
   const handleDrawerClose = () => {
-    console.log("close")
     setOpen(false);
   };
 
