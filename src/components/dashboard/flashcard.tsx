@@ -14,6 +14,7 @@ import { useFlashCardData } from "./useFlashCardData";
 import FlashCardData from "./FlashCardData";
 import LoopCountSlider from "./LoopCountSlider";
 import FontSlider from "./FontSlider";
+import FlashcardForm from "./flashcardForm";
 // ----------------------------------------------------------------------
 declare global {
   interface HTMLCanvasElement {
@@ -183,6 +184,7 @@ export default function FlashcardComponent(): JSX.Element {
               <FlashCardData
                 loadData={loadData}
                 onFileInputChange={onFileInputChange} />
+              <FlashcardForm />
             </Stack>
           </Grid>
         </Grid>

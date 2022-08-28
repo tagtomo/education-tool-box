@@ -1,23 +1,19 @@
 import React, { useMemo } from 'react';
 // material
-import { useForm, SubmitHandler, FormProvider, useFormContext, useFieldArray } from "react-hook-form";
-import { TextField } from "@mui/material";
+import { useForm, useFormContext, useFieldArray } from "react-hook-form";
+import { Stack } from "@mui/material";
 import { IconButton } from "@mui/material";
 import DeleteIcon from '@mui/icons-material/Delete';
 import AddIcon from '@mui/icons-material/Add';
 import yup from "../../utils/yup.locale";
 import { FlashcardFormValues } from "../../@types/flashcard";
 import { yupResolver } from "@hookform/resolvers/yup";
+import RHFTextField from "../hook-form/RHFTextField";
+import RHFSwitch from "../hook-form/RHFSwitch";
+import RHFSlider from "../hook-form/RHFSlider";
+import FormProvider from "../hook-form/FormProvider";
 
 // ----------------------------------------------------------------------
-type FlashCard = {
-  leftSide: string;
-  rightSide: string;
-}
-type FormValues = {
-  flashcards: FlashCard[];
-};
-
 type FormValuesProps = FlashcardFormValues;
 
 export default function FlashcardForm(): JSX.Element {
@@ -67,11 +63,42 @@ export default function FlashcardForm(): JSX.Element {
   };
 
   return (
-    <FormProvider {...methods}>
-      <form onSubmit={handleSubmit(onSubmit)}>
+    <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
+      <Stack direction="column">
+        <RHFTextField
+          name={`flashcard.title`}
+          label="title"
+          placeholder={"title"}
+        />
+        <RHFTextField
+          name={`flashcard.endTitle`}
+          label="endTitle"
+          placeholder={"endTitle"}
+        />
+        <RHFSwitch
+          name={`flashcard.shaffle`}
+          label="shaffle"
+          placeholder={"shaffle"}
+        />
+        <RHFSlider
+          name={`flashcard.loopCount`}
+          label="loopCount"
+          placeholder={"loopCount"}
+          step={1}
+          min={1}
+          max={5}
+        />
+        <RHFSlider
+          name={`flashcard.fontSize`}
+          label="fontSize"
+          placeholder={"fontSize"}
+          step={100}
+          min={100}
+          max={1000}
+        />
         <FlashcardFormDetail />
         <input type="submit" />
-      </form>
+      </Stack>
     </FormProvider>
   );
 }
@@ -91,51 +118,22 @@ const FlashcardFormDetail: React.FC = () => {
     <React.Fragment>
       {fields.map((field, index) => {
         return (
-          <div key={field.id}>
+          <Stack direction="row">
+            <RHFTextField
+              name={`flashcard.items[${index}].leftSide`}
+              label="leftSide"
+              placeholder={"leftSide"}
+            />
+            <RHFTextField
+              name={`flashcard.items[${index}].leftSide`}
+              label="leftSide"
+              placeholder={"leftSide"}
+            />
+
             <IconButton onClick={() => remove(index)}>
               <DeleteIcon />
             </IconButton>
-            <section className={"section"} key={field.id}>
-              <TextField
-                id="outlined-number"
-                label="leftSide"
-                variant="outlined"
-                type="string"
-                {...register(
-                  `flashcards[${index}].leftSide` as const,
-                  {
-                    required: true
-                  }
-                )}
-                error={
-                  !!errors?.flashcards?.[
-                    index
-                  ]?.leftSide
-                }
-                placeholder="leftSide"
-              // defaultValue={field?.leftSide}
-              />
-              <TextField
-                id="outlined-number"
-                label="rightSide"
-                variant="outlined"
-                type="string"
-                {...register(
-                  `flashcards[${index}].rightSide` as const,
-                  {
-                    required: true
-                  }
-                )}
-                error={
-                  !!errors?.flashcards?.[
-                    index
-                  ]?.rightSide
-                }
-                placeholder="rightSide"
-              // defaultValue={field?.rightSide}
-              />
-            </section>
-          </div>
+          </Stack>
         );
       })}
       <IconButton
